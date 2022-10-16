@@ -3,8 +3,8 @@
 Tools for compiling Flutter and Dart projects with Nix
 
 ## Examples
-[github:FlafyDev/guifetch](https://github.com/FlafyDev/guifetch) - Flutter project
-[github:FlafyDev/listen_blue](https://github.com/FlafyDev/listen_blue) - Flutter project
+[github:FlafyDev/guifetch](https://github.com/FlafyDev/guifetch) - Flutter project  
+[github:FlafyDev/listen_blue](https://github.com/FlafyDev/listen_blue) - Flutter project  
 
 ## Packaging a Flutter project
 ###### Tested versions: Flutter v3.0.4, v3.3.3
