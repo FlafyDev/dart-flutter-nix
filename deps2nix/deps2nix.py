@@ -123,7 +123,7 @@ def get_pub(pubspec_lock):
 
         path = join(
             package['source'],
-            desc['url'].removeprefix("https://"),
+            desc['url'].removeprefix("https://").replace("/", "%47"),
             f"{desc['name']}-{package['version']}"
         )
 

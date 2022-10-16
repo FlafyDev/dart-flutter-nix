@@ -130,7 +130,7 @@ stdenv.mkDerivation (args // rec {
 
     # Test directories
     # tree $HOME/.cache/flutter
-    # ls -l $PUB_CACHE/hosted/pub.dartlang.org/
+    # tree $PUB_CACHE -L 3
 
     flutter config --no-analytics &>/dev/null # mute first-run
     flutter config --enable-linux-desktop

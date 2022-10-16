@@ -2,7 +2,7 @@
   description = "Tools for compiling Flutter and Dart projects";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs?rev=2277e4c9010b0f27585eb0bed0a86d7cbc079354";
+    nixpkgs.url = "github:NixOS/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
   };
 

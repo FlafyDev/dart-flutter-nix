@@ -6,7 +6,7 @@ Tools for compiling Flutter and Dart projects with Nix
 [github:FlafyDev/guifetch](https://github.com/FlafyDev/guifetch)
 
 ## Packaging a Flutter project
-###### Tested versions: Flutter v3.0.4
+###### Tested versions: Flutter v3.0.4, v3.3.3
 ### 1. run `deps2nix`
 deps2nix has to be built with your version of Flutter as a dependency (It can't take `flutter` from path as it requires `flutter.unwrapped`).
 ```nix
