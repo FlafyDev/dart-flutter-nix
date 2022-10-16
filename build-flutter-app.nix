@@ -17,6 +17,7 @@
 , gtk3
 , glib
 , pcre
+, pcre2
 , libepoxy
 , git
 , dart
@@ -112,6 +113,7 @@ stdenv.mkDerivation (args // rec {
     gtk3
     glib
     pcre
+    pcre2
     util-linux
   ] ++ (args.buildInputs or [ ]);
 
