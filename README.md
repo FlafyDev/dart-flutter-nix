@@ -6,6 +6,7 @@ Tools for compiling Flutter and Dart projects with Nix
 [github:FlafyDev/guifetch](https://github.com/FlafyDev/guifetch)
 
 ## Packaging a Flutter project
+###### Tested versions: Flutter v3.0.4
 ### 1. run `deps2nix`
 deps2nix has to be built with your version of Flutter as a dependency (It can't take `flutter` from path as it requires `flutter.unwrapped`).
 ```nix
@@ -18,6 +19,10 @@ in {
   devShell = pkgs.mkShell {
     packages = [
       pkgs.deps2nix
+      # or explicitly match your version of Flutter
+      (pkgs.deps2nix.override {
+        flutter = pkgs.flutter2;
+      })
     ];
   };
 }
@@ -40,6 +45,15 @@ buildFlutterApp {
 ```
 `depsFile` can be set to override the default location of `deps2nix.lock` (the root of the Flutter project.)  
 Setting `configurePhase`, `buildPhase`, or `installPhase` will do nothing. Consider using `pre` and `post` instead.
+
+##### To explicitly state which Flutter to use.
+```nix
+pkgs.callPackage ./package.nix {
+  buildFlutterApp = pkgs.buildFlutterApp.override {
+    flutter = pkgs.flutter2;
+  };
+}
+```
 
 
 ## Packaging a Dart project
