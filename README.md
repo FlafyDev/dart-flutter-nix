@@ -62,3 +62,9 @@ Planned
 
 ## Development enviroments
 Planned
+
+# Sources
+These sources helped me understand how Flutter downloads stuff.
+- https://github.com/NixOS/nixpkgs/blob/828d846641f823d099832359d4134a21198dedb7/pkgs/build-support/flutter/default.nix
+- https://github.com/ilkecan/flutter-nix
+- https://github.com/tadfisher/nix-dart
