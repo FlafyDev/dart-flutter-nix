@@ -31,6 +31,7 @@
 , runCommand
 , clang
 , tree
+, callPackage
 }:
 
 args:
@@ -42,18 +43,11 @@ let
     makeLibraryPath
     ;
 
+  shared = callPackage ./shared { };
+
   deps = importJSON (args.depsFile or (args.src + "/deps2nix.lock"));
 
-  pubCache = (runCommand "${args.pname}-pub-cache" { } (mapAttrsToList
-    (path: dep:
-      let
-        derv = fetchzip dep;
-      in
-      ''
-        mkdir -p $out/${dirOf path}
-        ln -s ${derv} $out/${path}
-      '')
-    deps.pub));
+  pubCache = shared.generatePubCache { inherit deps args; };
 
   # ~/.cache/flutter/<cache files>
   cache = (runCommand "${args.pname}-cache" { } ((mapAttrsToList
@@ -145,7 +139,7 @@ stdenv.mkDerivation (args // rec {
   buildPhase = ''
     runHook preBuild
 
-    flutter build linux -v || true
+    flutter build linux -v
 
     runHook postBuild
   '';

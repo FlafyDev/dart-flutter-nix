@@ -40,6 +40,7 @@
             inherit mkPyScript;
           };
           buildFlutterApp = prev.callPackage ./builders/build-flutter-app.nix { };
+          buildDartApp = prev.callPackage ./builders/build-dart-app.nix { };
           mkFlutterShell = prev.callPackage ./shells/mk-flutter-shell.nix {
             android-sdk-builder = android.sdk.${prev.system};
           };

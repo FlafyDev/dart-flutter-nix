@@ -140,14 +140,29 @@ def get_pub(pubspec_lock):
 
 def main():
     global pbar
-
-    pubspec_lock = yaml.safe_load(open("pubspec.lock", "r"))
     deps = {}
 
-    pbar = tqdm(total=10+len({ k: v for k, v in pubspec_lock["packages"].items() if "url" in v["description"] }))
+    pubspec_lock = yaml.safe_load(open("pubspec.lock", "r"))
 
-    if "flutter" in pubspec_lock["packages"] and pubspec_lock["packages"]["flutter"]["source"] == "sdk":
+    pbar = tqdm(total=len({ k: v for k, v in pubspec_lock["packages"].items() if "url" in v["description"] }))
+
+    is_flutter = "flutter" in pubspec_lock["packages"] and pubspec_lock["packages"]["flutter"]["source"] == "sdk" 
+    if (is_flutter):
+        print("Flutter project detected.")
+
+        pbar.total += 10
         deps["sdk"] = get_sdk_deps()
+    else:
+        print("Dart project detected.")
+
+        pubspec_yaml = yaml.safe_load(open("pubspec.yaml", "r"))
+
+        if pubspec_yaml["executables"]:
+            deps["dart"] = {
+                "executables": pubspec_yaml["executables"] 
+            }
+            print("Found executables.")
+
 
     deps["pub"] = get_pub(pubspec_lock)
 
