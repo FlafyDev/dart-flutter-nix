@@ -60,8 +60,47 @@ pkgs.callPackage ./package.nix {
 ## Packaging a Dart project
 Planned
 
-## Development enviroments
-Planned
+## DevShells for Flutter projects
+You can create a devShell for Flutter projects with `mkFlutterShell` similar to how you would with `mkShell`.
+You can get `mkFlutterShell` through the default overlay (`overlays.default`).
+
+```nix
+let
+  pkgs = import nixpkgs {
+    inherit system;
+    overlays = [ dart-flutter.overlays.default ];
+  };
+in
+{
+  devShell = pkgs.mkFlutterShell {
+    # Enable if you want to build you app for mobile.
+    android = {
+      enable = true; # Default: false
+      buildToolsVersions = [ "29-0-2" ]; # Default: [ "30-0-3" ]
+      platformsAndroidVersions = [ "32" ]; # Default: [ "31" ]
+      androidStudio = false; # Default: false
+      emulator = false; # Default: false
+    };
+
+    # Enable if you want to build your app for the Linux desktop.
+    linux = {
+      enable = true; # Default: false
+    };
+
+    # This function also acts like `mkShell`, so you can still do:
+    buildInputs = with pkgs; [
+      gst_all_1.gstreamer
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      libunwind
+      elfutils
+      zstd
+      orc
+    ];
+  };
+}
+```
 
 # Sources
 These sources helped me understand how Flutter downloads stuff.
