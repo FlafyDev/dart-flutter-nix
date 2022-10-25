@@ -4,31 +4,28 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
+    android = {
+      url = "github:tadfisher/android-nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, flake-utils, nixpkgs }:
+  outputs = { self, flake-utils, nixpkgs, android }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
           pkgs = import nixpkgs {
             inherit system;
+            overlays = [ self.overlays.default ];
           };
         in
         rec {
-          packages =
-            let
-              mkPyScript = pkgs.callPackage ./utils/mk-py-script.nix {
-                python = pkgs.python310;
-              };
-            in
-            {
-              deps2nix = pkgs.callPackage ./deps2nix {
-                inherit mkPyScript;
-              };
-            };
+          packages = {
+            inherit (pkgs) deps2nix;
+          };
           devShell = pkgs.mkShell {
             packages = [
-              packages.deps2nix
+              pkgs.deps2nix
             ];
           };
         }) // {
@@ -42,7 +39,10 @@
           deps2nix = prev.callPackage ./deps2nix {
             inherit mkPyScript;
           };
-          buildFlutterApp = prev.callPackage ./build-flutter-app.nix { };
+          buildFlutterApp = prev.callPackage ./builders/build-flutter-app.nix { };
+          mkFlutterShell = prev.callPackage ./shells/mk-flutter-shell.nix {
+            android-sdk-builder = android.sdk.${prev.system};
+          };
         };
     };
 }
