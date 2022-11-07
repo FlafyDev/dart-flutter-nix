@@ -38,7 +38,7 @@
           python = prev.python310;
         };
         shared = prev.callPackage ./builders/shared {};
-      in {
+      in rec {
         deps2nix = prev.callPackage ./deps2nix {
           inherit mkPyScript;
         };
@@ -47,6 +47,7 @@
         buildDartApp = prev.callPackage ./builders/build-dart-app.nix {};
         mkFlutterShell = prev.callPackage ./shells/mk-flutter-shell.nix {
           android-sdk-builder = android.sdk.${prev.system};
+          inherit deps2nix;
         };
       };
     };
