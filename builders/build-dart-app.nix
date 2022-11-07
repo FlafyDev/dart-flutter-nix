@@ -9,25 +9,40 @@
     (lib)
     importJSON
     mapAttrsToList
+    concatStringsSep
     ;
 
   shared = callPackage ./shared {};
+  jit = args.jit or false;
 
   deps = importJSON (args.depsFile or (args.src + "/deps2nix.lock"));
   inherit (deps.dart) executables;
 
   pubCache = shared.generatePubCache {inherit deps args;};
   buildCommands = builtins.concatStringsSep "\n" (mapAttrsToList
-    (_execName: dartFile: "dart compile aot-snapshot ./bin/${dartFile}.dart")
+    (_execName: dartFile:
+      if jit
+      then "dart --snapshot=./bin/${dartFile}.jit ./bin/${dartFile}.dart"
+      else "dart compile aot-snapshot ./bin/${dartFile}.dart")
     executables);
 
   installSnapshotsCommands = builtins.concatStringsSep "\n" (mapAttrsToList
     (execName: dartFile: let
-      aotPath = "$out/lib/dart-${args.pname}-${args.version}/${dartFile}.aot";
-    in ''
-      cp bin/${dartFile}.aot ${aotPath}
-      makeWrapper ${dart}/bin/dartaotruntime $out/bin/${execName} --argv0 "${execName}" --add-flags "${aotPath}"
-    '')
+      flags = concatStringsSep " " (args.dartRuntimeFlags or []);
+    in
+      if jit
+      then let 
+        jitPath = "$out/lib/dart-${args.pname}-${args.version}/${dartFile}.jit";
+      in ''
+        cp bin/${dartFile}.jit ${jitPath}
+        makeWrapper ${dart}/bin/dart $out/bin/${execName} --argv0 "${execName}" --add-flags "${flags} ${jitPath}"
+      ''
+      else let
+        aotPath = "$out/lib/dart-${args.pname}-${args.version}/${dartFile}.aot";
+      in ''
+        cp bin/${dartFile}.aot ${aotPath}
+        makeWrapper ${dart}/bin/dartaotruntime $out/bin/${execName} --argv0 "${execName}" --add-flags "${flags} ${aotPath}"
+      '')
     executables);
 in
   stdenv.mkDerivation (args

@@ -41,6 +41,9 @@ buildFlutterApp {
   pname = "pname";
   version = "version";
 
+  # Opitonal: 
+  # depsFile = <path> (default = src/deps2nix.lock)
+
   src = ./.;
 }
 ```
@@ -58,7 +61,22 @@ pkgs.callPackage ./package.nix {
 
 
 ## Packaging a Dart project
-Planned
+The process is similar to `buildFlutterApp`
+```
+{ buildDartApp }:
+
+buildDartApp {
+  pname = "pname";
+  version = "version";
+
+  # Opitonal: 
+  # depsFile = <path> (default = src/deps2nix.lock)
+  # dartRuntimeFlags = <list of strings> (default = []) 
+  # jit = <bool> (default = false)
+
+  src = ./.;
+}
+```
 
 ## DevShells for Flutter projects
 You can create a devShell for Flutter projects with `mkFlutterShell` similar to how you would with `mkShell`.
