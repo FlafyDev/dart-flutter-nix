@@ -33,21 +33,26 @@
       };
     })
     // {
-      overlays.default = _final: prev: let
-        mkPyScript = prev.callPackage ./utils/mk-py-script.nix {
-          python = prev.python310;
+      overlays = {
+        dev = _final: prev: let
+          shared = prev.callPackage ./builders/shared {};
+        in {
+          inherit (shared) generatePubCache;
         };
-        shared = prev.callPackage ./builders/shared {};
-      in rec {
-        deps2nix = prev.callPackage ./deps2nix {
-          inherit mkPyScript;
-        };
-        inherit (shared) generatePubCache;
-        buildFlutterApp = prev.callPackage ./builders/build-flutter-app.nix {};
-        buildDartApp = prev.callPackage ./builders/build-dart-app.nix {};
-        mkFlutterShell = prev.callPackage ./shells/mk-flutter-shell.nix {
-          android-sdk-builder = android.sdk.${prev.system};
-          inherit deps2nix;
+        default = _final: prev: let
+          mkPyScript = prev.callPackage ./utils/mk-py-script.nix {
+            python = prev.python310;
+          };
+        in rec {
+          deps2nix = prev.callPackage ./deps2nix {
+            inherit mkPyScript;
+          };
+          buildFlutterApp = prev.callPackage ./builders/build-flutter-app.nix {};
+          buildDartApp = prev.callPackage ./builders/build-dart-app.nix {};
+          mkFlutterShell = prev.callPackage ./shells/mk-flutter-shell.nix {
+            android-sdk-builder = android.sdk.${prev.system};
+            inherit deps2nix;
+          };
         };
       };
     };
