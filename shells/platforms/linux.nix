@@ -1,40 +1,40 @@
-{ flutter
-, lib
-, cmake
-, ninja
-, pkg-config
-, wrapGAppsHook
-, autoPatchelfHook
-, util-linux
-, libselinux
-, libsepol
-, libthai
-, libdatrie
-, libxkbcommon
-, at-spi2-core
-, xorg
-, dbus
-, gtk3
-, glib
-, pcre
-, pcre2
-, libepoxy
-, git
-, dart
-, bash
-, curl
-, unzip
-, which
-, xz
-, stdenv
-, fetchzip
-, runCommand
-, clang
-, tree
-}:
-_: {
+{
+  flutter,
+  lib,
+  cmake,
+  ninja,
+  pkg-config,
+  wrapGAppsHook,
+  autoPatchelfHook,
+  util-linux,
+  libselinux,
+  libsepol,
+  libthai,
+  libdatrie,
+  libxkbcommon,
+  at-spi2-core,
+  xorg,
+  dbus,
+  gtk3,
+  glib,
+  pcre,
+  pcre2,
+  libepoxy,
+  git,
+  dart,
+  bash,
+  curl,
+  unzip,
+  which,
+  xz,
+  stdenv,
+  fetchzip,
+  runCommand,
+  clang,
+  tree,
+}: _: {
   shellHook = ''
-    export LD_LIBRARY_PATH=${lib.makeLibraryPath [ libepoxy ]}
+    export LD_LIBRARY_PATH=${lib.makeLibraryPath [libepoxy]}
   '';
 
   nativeBuildInputs = [
