@@ -19,7 +19,7 @@
             overlays = [ self.overlays.default ];
           };
         in
-        rec {
+        {
           packages = {
             inherit (pkgs) deps2nix;
           };
@@ -29,16 +29,18 @@
             ];
           };
         }) // {
-      overlays.default = final: prev:
+      overlays.default = _final: prev:
         let
           mkPyScript = prev.callPackage ./utils/mk-py-script.nix {
             python = prev.python310;
           };
+          shared = prev.callPackage ./builders/shared { };
         in
         {
           deps2nix = prev.callPackage ./deps2nix {
             inherit mkPyScript;
           };
+          inherit (shared) generatePubCache;
           buildFlutterApp = prev.callPackage ./builders/build-flutter-app.nix { };
           buildDartApp = prev.callPackage ./builders/build-dart-app.nix { };
           mkFlutterShell = prev.callPackage ./shells/mk-flutter-shell.nix {
