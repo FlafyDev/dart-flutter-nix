@@ -50,7 +50,7 @@ let
   pubCache = shared.generatePubCache { inherit deps args; };
 
   # ~/.cache/flutter/<cache files>
-  cache = (runCommand "${args.pname}-cache" { } ((mapAttrsToList
+  cache = runCommand "${args.pname}-cache" { } ((mapAttrsToList
     (_name: sdk:
       let
         derv = fetchzip (removeAttrs sdk [ "cachePath" ]);
@@ -63,7 +63,7 @@ let
     (name: version: ''
       echo ${version} > $out/${name}.stamp
     '')
-    deps.sdk.stamps)));
+    deps.sdk.stamps));
 in
 stdenv.mkDerivation (args // rec {
   nativeBuildInputs = [

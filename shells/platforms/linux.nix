@@ -32,7 +32,7 @@
 , clang
 , tree
 }:
-{}: {
+_: {
   shellHook = ''
     export LD_LIBRARY_PATH=${lib.makeLibraryPath [ libepoxy ]}
   '';

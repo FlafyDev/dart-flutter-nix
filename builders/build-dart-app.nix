@@ -1,39 +1,9 @@
-{ flutter
-, lib
-, cmake
-, ninja
-, pkg-config
-, wrapGAppsHook
-, autoPatchelfHook
-, util-linux
-, libselinux
-, libsepol
-, libthai
-, libdatrie
-, libxkbcommon
-, at-spi2-core
-, xorg
-, dbus
-, gtk3
-, glib
-, pcre
-, pcre2
-, libepoxy
-, git
+{
+ lib
 , dart
-, bash
-, curl
-, unzip
-, which
-, xz
-, stdenv
-, fetchzip
-, runCommand
-, clang
-, tree
 , callPackage
-, writeShellScript
 , makeWrapper
+, stdenv
 }:
 
 args:
@@ -42,17 +12,16 @@ let
   inherit (lib)
     importJSON
     mapAttrsToList
-    makeLibraryPath
     ;
 
   shared = callPackage ./shared { };
 
   deps = importJSON (args.depsFile or (args.src + "/deps2nix.lock"));
-  executables = deps.dart.executables;
+  inherit (deps.dart) executables;
 
   pubCache = shared.generatePubCache { inherit deps args; };
   buildCommands = builtins.concatStringsSep "\n" (mapAttrsToList
-    (execName: dartFile:
+    (_execName: dartFile:
       "dart compile aot-snapshot ./bin/${dartFile}.dart")
     executables);
 
@@ -65,7 +34,7 @@ let
     '')
     executables);
 in
-stdenv.mkDerivation (args // rec {
+stdenv.mkDerivation (args // {
   nativeBuildInputs = [
     makeWrapper
   ] ++ (args.nativeBuildInputs or [ ]);

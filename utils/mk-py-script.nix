@@ -8,7 +8,7 @@
 }:
 
 stdenvNoCC.mkDerivation {
-  name = name;
+  inherit name;
   buildInputs = [ makeWrapper (python.withPackages pythonLibraries) ];
   unpackPhase = "true";
   installPhase =

@@ -45,7 +45,7 @@
 }:
 let
   android-sdk =
-    (android-sdk-builder
+    android-sdk-builder
       (sdkPkgs: with sdkPkgs; lib.lists.flatten [
         cmdline-tools-latest
         platform-tools
@@ -54,8 +54,7 @@ let
         # build-tools-30-0-3
         (map (ver: sdkPkgs."platforms-android-${ver}") platformsAndroidVersions)
         (map (ver: sdkPkgs."build-tools-${ver}") buildToolsVersions)
-      ] ++ lib.optional emulator sdkPkgs.emulator)
-    );
+      ] ++ lib.optional emulator sdkPkgs.emulator);
 in
 
 {
