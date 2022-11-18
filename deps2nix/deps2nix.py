@@ -178,7 +178,7 @@ def main():
     pbar = tqdm(total=len({ k: v for k, v in pubspec_lock["packages"].items() if "url" in v["description"] }))
 
     is_flutter = "flutter" in pubspec_lock["packages"] and pubspec_lock["packages"]["flutter"]["source"] == "sdk" 
-    if (is_flutter):
+    if is_flutter:
         print("Flutter project detected.")
 
         pbar.total += 10
