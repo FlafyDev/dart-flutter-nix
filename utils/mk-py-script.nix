@@ -7,7 +7,7 @@
 }: {
   name,
   pythonLibraries ? (ps: []),
-  dependeinces ? [],
+  dependencies ? [],
   isolate ? true,
   content,
 }:
@@ -18,9 +18,9 @@ stdenvNoCC.mkDerivation {
   installPhase = let
     wrap =
       if isolate
-      then "wrapProgram $out/bin/${name} --set PATH ${lib.makeBinPath dependeinces}"
+      then "wrapProgram $out/bin/${name} --set PATH ${lib.makeBinPath dependencies}"
       else "wrapProgram $out/bin/${name} --suffix PATH : ${
-        lib.makeBinPath dependeinces
+        lib.makeBinPath dependencies
       }";
 
     file = writeText "${name}-py-file" "#!/usr/bin/env python\n\n${content}";
