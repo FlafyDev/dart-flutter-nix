@@ -6,27 +6,74 @@ import subprocess
 import json
 import yaml
 from tqdm import tqdm
+import logging
 
 pbar: tqdm
+log = logging.getLogger(__name__)
 
 
-def _get_hash(name: str, url: str) -> str:
+def _prefetch_hosted_package(name, base_url, version) -> dict:
+    url = urljoin(
+        base_url,
+        "packages",
+        name,
+        "versions",
+        f"{version}.tar.gz",
+    )
+    sha256 = _prefetch_package_url(
+        name,
+        url,
+    )
+
+    nixArgs = {
+        "name": f"pub-{name}-{version}",
+        "url": url,
+        "stripRoot": False,
+        "sha256": sha256
+    }
+    return { "fetcher": "zip", "args": nixArgs }
+
+def _prefetch_package_url(name, url) -> str:
+        return subprocess.check_output([
+            "nix-prefetch-url",
+            url,
+            "--unpack",
+            "--type",
+            "sha256",
+            "--name",
+            name.replace("/", "-"),
+        ],
+        encoding="utf-8", stderr=subprocess.DEVNULL).strip()
+
+def _prefetch_git_package(name, package) -> dict:
+    desc = package['description']
+    out = subprocess.check_output([
+        "nix-prefetch-git",
+        "--url",
+        desc['url'],
+        "--rev",
+        desc['resolved-ref'] or desc['ref'],
+        "--out",
+        name.replace("/", "-"),
+        ],
+        encoding="utf-8", stderr=subprocess.DEVNULL).strip()
+    nixArgs = json.loads(out)
+    del nixArgs['date'] # reproducibility
+    del nixArgs['path'] # alternate store path(?)
+    return { "fetcher": "fetchgit", "args": nixArgs }
+
+def _prefetch_package(name, package) -> dict:
     global pbar
 
-    pbar.write(f"Downloading {url}")
-    res = subprocess.check_output(["nix-prefetch-url",
-                                   url,
-                                   "--unpack",
-                                   "--type",
-                                   "sha256",
-                                   "--name",
-                                   name.replace("/", "-"),
-                                   ], encoding="utf-8", stderr=subprocess.DEVNULL).strip()
+    pbar.write(f"Downloading {name}")
+    res = {
+        "hosted": lambda: _prefetch_hosted_package(
+            name, package['description']['url'], package['version']),
+        "git": lambda: _prefetch_git_package(name, package)
+    }[package["source"]]()
+
     pbar.update()
     return res
-
-def _set_hash(dict):
-    dict["sha256"] = _get_hash(dict["name"], dict["url"])
 
 def get_sdk_deps():
     internalDir = join(dirname(str(which('flutter'))), "internal")
@@ -60,13 +107,13 @@ def get_sdk_deps():
     def mk_dep(name: str, url: str | None = None, strip_root: bool = False, cache_path: str | None = None):
         url = url or f"{prefix}/{versions[name]}"
         sdkdeps["artifacts"][name] = {
-                "name": name,
+            "name": name,
             "url": url,
             "stripRoot": strip_root,
             "cachePath": cache_path or f"artifacts/{name}",
         }
 
-        _set_hash(sdkdeps["artifacts"][name])
+        sdkdeps["artifacts"][name] = _prefetch_package_url(name, url);
 
     def mk_stamp(name: str, version: str | None = None):
         sdkdeps["stamps"][name] = version or versions[name]
@@ -107,33 +154,17 @@ def get_sdk_deps():
 def get_pub(pubspec_lock):
     pub = {}
 
-    for package in pubspec_lock["packages"].values():
+    for (name, package) in pubspec_lock["packages"].items():
         desc = package['description']
-
-        if 'url' not in desc:
-            continue
-
-        url = urljoin(
-            desc['url'],
-            "packages",
-            desc['name'],
-            "versions",
-            f"{package['version']}.tar.gz",
-        )
 
         path = join(
             package['source'],
             desc['url'].removeprefix("https://").replace("/", "%47"),
-            f"{desc['name']}-{package['version']}"
+            f"{name}-{package['version']}"
         )
 
-        pub[path] = {
-            "name": f"pub-{desc['name']}-{package['version']}",
-            "url": url,
-            "stripRoot": False,
-        }
+        pub[path] = _prefetch_package(name, package)
 
-        _set_hash(pub[path])
 
     return pub
 
