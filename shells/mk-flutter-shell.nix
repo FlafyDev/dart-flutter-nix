@@ -20,7 +20,7 @@
     then callPackage ./platforms/android.nix {inherit android-sdk-builder;} (builtins.removeAttrs android ["enable"])
     else {};
 
-  shells = [args shellLinux shellAndroid];
+  shells = [shellLinux shellAndroid args];
 in
   mkShell ((builtins.removeAttrs args [
       "android"
