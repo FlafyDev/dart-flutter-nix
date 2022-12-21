@@ -34,7 +34,7 @@
   tree,
 }: _: {
   shellHook = ''
-    export LD_LIBRARY_PATH=${lib.makeLibraryPath [libepoxy]}
+    export LD_LIBRARY_PATH=''$LD_LIBRARY_PATH:${lib.makeLibraryPath [libepoxy]}
   '';
 
   nativeBuildInputs = [
