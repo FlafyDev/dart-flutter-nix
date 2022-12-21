@@ -1,9 +1,9 @@
 {
   lib,
   dart,
-  callPackage,
   makeWrapper,
   stdenv,
+  generatePubCache,
 }: args: let
   inherit
     (lib)
@@ -12,13 +12,16 @@
     concatStringsSep
     ;
 
-  shared = callPackage ./shared {};
   jit = args.jit or false;
 
-  deps = importJSON (args.depsFile or (args.src + "/deps2nix.lock"));
+  deps = args.deps or (importJSON (args.depsFile or (args.src + "/deps2nix.lock")));
   inherit (deps.dart) executables;
 
-  pubCache = shared.generatePubCache {inherit deps args;};
+  pubCache = generatePubCache {
+    inherit deps;
+    inherit (args) pname;
+  };
+
   buildCommands = builtins.concatStringsSep "\n" (mapAttrsToList
     (_execName: dartFile:
       if jit
@@ -31,7 +34,7 @@
       flags = concatStringsSep " " (args.dartRuntimeFlags or []);
     in
       if jit
-      then let 
+      then let
         jitPath = "$out/lib/dart-${args.pname}-${args.version}/${dartFile}.jit";
       in ''
         cp bin/${dartFile}.jit ${jitPath}
@@ -45,7 +48,10 @@
       '')
     executables);
 in
-  stdenv.mkDerivation (args
+  stdenv.mkDerivation ((builtins.removeAttrs args [
+      "deps"
+      "depsFile"
+    ])
     // {
       nativeBuildInputs =
         [
@@ -59,7 +65,7 @@ in
         ]
         ++ (args.buildInputs or []);
 
-      PUB_CACHE = toString pubCache;
+      PUB_CACHE = args.PUB_CACHE or (toString pubCache);
 
       configurePhase = ''
         runHook preConfigure

@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
         lib.makeBinPath dependeinces
       }";
 
-    file = writeText "${name}-py-file" "#!/usr/bin/env python\n\n${content}";
+    file = writeText "${name}-py-file" "#!${python}/bin/python\n\n${content}";
   in ''
     mkdir -p $out/bin
     cp ${file} $out/bin/${name}

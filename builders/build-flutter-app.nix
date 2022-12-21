@@ -32,7 +32,7 @@
   runCommand,
   clang,
   tree,
-  callPackage,
+  generatePubCache,
 }: args: let
   inherit
     (lib)
@@ -41,11 +41,11 @@
     makeLibraryPath
     ;
 
-  shared = callPackage ./shared {};
-
   deps = importJSON (args.depsFile or (args.src + "/deps2nix.lock"));
+  # deps = {pub = {};};
 
-  pubCache = shared.generatePubCache {inherit deps args;};
+  pubCache = generatePubCache {inherit deps args;};
+  # pubCache = "";
 
   # ~/.cache/flutter/<cache files>
   cache = runCommand "${args.pname}-cache" {} ((mapAttrsToList

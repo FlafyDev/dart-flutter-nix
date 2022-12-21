@@ -5,13 +5,14 @@
 }: {
   generatePubCache = {
     deps,
-    args,
-  }: (runCommand "${args.pname}-pub-cache" {} (lib.mapAttrsToList
-    (path: dep: let
-      derv = fetchzip dep;
-    in ''
-      mkdir -p $out/${dirOf path}
-      ln -s ${derv} $out/${path}
-    '')
-    deps.pub));
+    pname,
+  }: (runCommand "${pname}-pub-cache" {} ([''mkdir -p "$out"'']
+    ++ (lib.mapAttrsToList
+      (path: dep: let
+        derv = fetchzip dep;
+      in ''
+        mkdir -p $out/${dirOf path}
+        ln -s ${derv} $out/${path}
+      '')
+      deps.pub)));
 }

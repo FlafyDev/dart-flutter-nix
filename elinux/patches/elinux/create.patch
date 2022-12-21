@@ -1,0 +1,67 @@
+diff --git a/lib/commands/create.dart b/lib/commands/create.dart
+index 3e538ed..fa6546b 100644
+--- a/lib/commands/create.dart
++++ b/lib/commands/create.dart
+@@ -167,36 +167,36 @@ class ELinuxCreateCommand extends CreateCommand {
+         .childDirectory('packages')
+         .childDirectory('flutter_tools')
+         .childDirectory('templates');
+-    _runGitClean(templates);
++    // _runGitClean(templates);
+ 
+     try {
+-      for (final Directory projectType
+-          in eLinuxTemplates.listSync().whereType<Directory>()) {
+-        final Directory dest = templates
+-            .childDirectory(projectType.basename)
+-            .childDirectory('elinux.tmpl');
+-        if (dest.existsSync()) {
+-          dest.deleteSync(recursive: true);
+-        }
+-
+-        copyDirectory(projectType, dest);
+-        if (projectType.basename == 'app') {
+-          final Directory sourceRunnerCommon =
+-              projectType.childDirectory('runner');
+-          if (!sourceRunnerCommon.existsSync()) {
+-            continue;
+-          }
+-          final Directory sourceFlutter = projectType.childDirectory('flutter');
+-          if (!sourceFlutter.existsSync()) {
+-            continue;
+-          }
+-          copyDirectory(sourceFlutter, dest.childDirectory('flutter'));
+-          copyDirectory(sourceRunnerCommon, dest.childDirectory('runner'));
+-        }
+-      }
++      // for (final Directory projectType
++      //     in eLinuxTemplates.listSync().whereType<Directory>()) {
++      //   final Directory dest = templates
++      //       .childDirectory(projectType.basename)
++      //       .childDirectory('elinux.tmpl');
++      //   if (dest.existsSync()) {
++      //     dest.deleteSync(recursive: true);
++      //   }
++      //
++      //   copyDirectory(projectType, dest);
++      //   if (projectType.basename == 'app') {
++      //     final Directory sourceRunnerCommon =
++      //         projectType.childDirectory('runner');
++      //     if (!sourceRunnerCommon.existsSync()) {
++      //       continue;
++      //     }
++      //     final Directory sourceFlutter = projectType.childDirectory('flutter');
++      //     if (!sourceFlutter.existsSync()) {
++      //       continue;
++      //     }
++      //     copyDirectory(sourceFlutter, dest.childDirectory('flutter'));
++      //     copyDirectory(sourceRunnerCommon, dest.childDirectory('runner'));
++      //   }
++      // }
+       return await _runCommand();
+     } finally {
+-      _runGitClean(templates);
++      // _runGitClean(templates);
+     }
+   }
+ 

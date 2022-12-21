@@ -1,11 +1,8 @@
 {
-  flutter,
   lib,
   cmake,
   ninja,
   pkg-config,
-  wrapGAppsHook,
-  autoPatchelfHook,
   util-linux,
   libselinux,
   libsepol,
@@ -27,14 +24,10 @@
   unzip,
   which,
   xz,
-  stdenv,
-  fetchzip,
-  runCommand,
   clang,
-  tree,
 }: _: {
   shellHook = ''
-    export LD_LIBRARY_PATH=''$LD_LIBRARY_PATH:${lib.makeLibraryPath [libepoxy]}
+    export LD_LIBRARY_PATH=''$LD_LIBRARY_PATH:${lib.makeLibraryPath [libepoxy libdatrie]}
   '';
 
   nativeBuildInputs = [
