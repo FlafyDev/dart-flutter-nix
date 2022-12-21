@@ -157,11 +157,9 @@ def main():
 
         pubspec_yaml = yaml.safe_load(open("pubspec.yaml", "r"))
 
-        if pubspec_yaml["executables"]:
-            deps["dart"] = {
-                "executables": pubspec_yaml["executables"] 
-            }
-            print("Found executables.")
+        deps["dart"] = {
+            "executables": pubspec_yaml.get("executables", {})
+        }
 
 
     deps["pub"] = get_pub(pubspec_lock)
