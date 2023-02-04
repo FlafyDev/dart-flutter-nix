@@ -77,13 +77,16 @@ def _prefetch_git_package(name, package) -> tuple[str, dict]:
     )
     return path, { "fetcher": "fetchgit", "args": nixArgs, "repo_name": repo_name }
 
-def _prefetch_package(name, package) -> tuple[str, dict]:
+def _prefetch_package(name, package, pub) -> None:
     res = {
         "hosted": lambda: _prefetch_hosted_package(name, package),
         "git": lambda: _prefetch_git_package(name, package)
-    }[package["source"]]()
+    }.get(package["source"])
+    
+    if res:
+        path, value = res()
+        pub[path] = value
 
-    return res
 
 def get_sdk_deps():
     internalDir = join(dirname(str(which('flutter'))), "internal")
@@ -167,22 +170,17 @@ def get_sdk_deps():
     return sdkdeps
 
 
-def get_pub(pubspec_lock):
+def get_pub(packages):
     global pbar
 
     pub = {}
 
-    for (name, package) in pubspec_lock["packages"].items():
-        source = package['source']
+    for (name, package) in packages.items():
+        pbar.write(f"Processing package {name}")
 
-        if source == "hosted" or source == "git":
-            pbar.write(f"Downloading {name}")
+        _prefetch_package(name, package, pub)
 
-            path, value = _prefetch_package(name, package)
-            pub[path] = value
-
-            pbar.update()
-
+        pbar.update()
 
     return pub
 
@@ -192,8 +190,9 @@ def main():
     deps = {}
 
     pubspec_lock = yaml.safe_load(open("pubspec.lock", "r"))
+    packages = pubspec_lock["packages"]
 
-    pbar = tqdm(total=len({ k: v for k, v in pubspec_lock["packages"].items() if v["source"] == "git" or v["source"] == "hosted" }))
+    pbar = tqdm(total=len(packages))
 
     is_flutter = "flutter" in pubspec_lock["packages"] and pubspec_lock["packages"]["flutter"]["source"] == "sdk" 
     if is_flutter:
@@ -212,7 +211,7 @@ def main():
             }
             pbar.write("Found executables.")
 
-    deps["pub"] = get_pub(pubspec_lock)
+    deps["pub"] = get_pub(packages)
 
     open("pubspec-nix.lock", "w").write(json.dumps(
         deps,
