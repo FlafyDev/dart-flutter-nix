@@ -1,6 +1,7 @@
 {
   lib,
   dart,
+  git,
   callPackage,
   makeWrapper,
   stdenv,
@@ -49,6 +50,7 @@ in
     // {
       nativeBuildInputs =
         [
+          git
           makeWrapper
         ]
         ++ (args.nativeBuildInputs or []);
@@ -66,6 +68,7 @@ in
 
         HOME=$(mktemp -d)
 
+        git config --global --add safe.directory '*'
         dart pub get --offline
 
         runHook postConfigure

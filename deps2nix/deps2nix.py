@@ -12,7 +12,9 @@ pbar: tqdm
 log = logging.getLogger(__name__)
 
 
-def _prefetch_hosted_package(name, base_url, version) -> dict:
+def _prefetch_hosted_package(name, package) -> tuple[str, dict]:
+    version = package['version']
+    base_url = package['description']['url']
     url = urljoin(
         base_url,
         "packages",
@@ -31,7 +33,12 @@ def _prefetch_hosted_package(name, base_url, version) -> dict:
         "stripRoot": False,
         "sha256": sha256
     }
-    return { "fetcher": "zip", "args": nixArgs }
+    path = join(
+        package['source'],
+        package['description']['url'].removeprefix("https://").replace("/", "%47"),
+        f"{name}-{package['version']}"
+    )
+    return path, { "fetcher": "fetchzip", "args": nixArgs }
 
 def _prefetch_package_url(name, url) -> str:
         return subprocess.check_output([
@@ -45,7 +52,7 @@ def _prefetch_package_url(name, url) -> str:
         ],
         encoding="utf-8", stderr=subprocess.DEVNULL).strip()
 
-def _prefetch_git_package(name, package) -> dict:
+def _prefetch_git_package(name, package) -> tuple[str, dict]:
     desc = package['description']
     out = subprocess.check_output([
         "nix-prefetch-git",
@@ -55,24 +62,27 @@ def _prefetch_git_package(name, package) -> dict:
         desc['resolved-ref'] or desc['ref'],
         "--out",
         name.replace("/", "-"),
+        "--leave-dotGit"
         ],
         encoding="utf-8", stderr=subprocess.DEVNULL).strip()
     nixArgs = json.loads(out)
     del nixArgs['date'] # reproducibility
     del nixArgs['path'] # alternate store path(?)
-    return { "fetcher": "fetchgit", "args": nixArgs }
+    repo_name = desc['url'].split("/")[-1]
+    if (repo_name.endswith(".git")):
+        repo_name = repo_name.removesuffix(".git")
+    path = join(
+        package['source'],
+        f"{repo_name}-{nixArgs['rev']}",
+    )
+    return path, { "fetcher": "fetchgit", "args": nixArgs, "repo_name": repo_name }
 
-def _prefetch_package(name, package) -> dict:
-    global pbar
-
-    pbar.write(f"Downloading {name}")
+def _prefetch_package(name, package) -> tuple[str, dict]:
     res = {
-        "hosted": lambda: _prefetch_hosted_package(
-            name, package['description']['url'], package['version']),
+        "hosted": lambda: _prefetch_hosted_package(name, package),
         "git": lambda: _prefetch_git_package(name, package)
     }[package["source"]]()
 
-    pbar.update()
     return res
 
 def get_sdk_deps():
@@ -105,6 +115,10 @@ def get_sdk_deps():
     #     )
 
     def mk_dep(name: str, url: str | None = None, strip_root: bool = False, cache_path: str | None = None):
+        global pbar
+
+        pbar.write(f"Downloading {name}");
+
         url = url or f"{prefix}/{versions[name]}"
         sdkdeps["artifacts"][name] = {
             "name": name,
@@ -113,7 +127,9 @@ def get_sdk_deps():
             "cachePath": cache_path or f"artifacts/{name}",
         }
 
-        sdkdeps["artifacts"][name] = _prefetch_package_url(name, url);
+        sdkdeps["artifacts"][name]["sha256"] = _prefetch_package_url(name, url);
+
+        pbar.update()
 
     def mk_stamp(name: str, version: str | None = None):
         sdkdeps["stamps"][name] = version or versions[name]
@@ -152,19 +168,20 @@ def get_sdk_deps():
 
 
 def get_pub(pubspec_lock):
+    global pbar
+
     pub = {}
 
     for (name, package) in pubspec_lock["packages"].items():
-        desc = package['description']
+        source = package['source']
 
-        path = join(
-            package['source'],
-            desc['url'].removeprefix("https://").replace("/", "%47"),
-            f"{name}-{package['version']}"
-        )
+        if source == "hosted" or source == "git":
+            pbar.write(f"Downloading {name}")
 
-        pub[path] = _prefetch_package(name, package)
+            path, value = _prefetch_package(name, package)
+            pub[path] = value
 
+        pbar.update()
 
     return pub
 
@@ -179,12 +196,12 @@ def main():
 
     is_flutter = "flutter" in pubspec_lock["packages"] and pubspec_lock["packages"]["flutter"]["source"] == "sdk" 
     if is_flutter:
-        print("Flutter project detected.")
+        pbar.write("Flutter project detected.")
 
         pbar.total += 10
         deps["sdk"] = get_sdk_deps()
     else:
-        print("Dart project detected.")
+        pbar.write("Dart project detected.")
 
         pubspec_yaml = yaml.safe_load(open("pubspec.yaml", "r"))
 
@@ -192,8 +209,7 @@ def main():
             deps["dart"] = {
                 "executables": pubspec_yaml["executables"] 
             }
-            print("Found executables.")
-
+            pbar.write("Found executables.")
 
     deps["pub"] = get_pub(pubspec_lock)
 

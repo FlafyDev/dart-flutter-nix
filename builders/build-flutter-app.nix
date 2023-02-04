@@ -133,6 +133,7 @@ in
         flutter config --no-analytics &>/dev/null # mute first-run
         flutter config --enable-linux-desktop
 
+        git config --global --add safe.directory '*'
         flutter pub get --offline
 
         runHook postConfigure
