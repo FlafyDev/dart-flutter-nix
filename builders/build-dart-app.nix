@@ -16,10 +16,10 @@
   shared = callPackage ./shared {};
   jit = args.jit or false;
 
-  deps = importJSON (args.depsFile or (args.src + "/deps2nix.lock"));
-  inherit (deps.dart) executables;
+  pubspecNixLock = importJSON (args.pubspecNixLockFile or (args.src + "/pubspec-nix.lock"));
+  inherit (pubspecNixLock.dart) executables;
 
-  pubCache = shared.generatePubCache {inherit deps args;};
+  pubCache = shared.generatePubCache {inherit pubspecNixLock args;};
   buildCommands = builtins.concatStringsSep "\n" (mapAttrsToList
     (_execName: dartFile:
       if jit

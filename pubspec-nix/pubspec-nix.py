@@ -213,7 +213,7 @@ def main():
 
     deps["pub"] = get_pub(pubspec_lock)
 
-    open("deps2nix.lock", "w").write(json.dumps(
+    open("pubspec-nix.lock", "w").write(json.dumps(
         deps,
         indent=2,
         separators=(',', ': ')

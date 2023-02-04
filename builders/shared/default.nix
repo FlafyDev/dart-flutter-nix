@@ -4,7 +4,7 @@
   runCommand,
 }: {
   generatePubCache = {
-    deps,
+    pubspecNixLock,
     args,
   }: (runCommand "${args.pname}-pub-cache" {} (lib.mapAttrsToList (
       path: dep: let
@@ -21,5 +21,5 @@
           ln -s ${derv}/.git $CACHE_DIR
         '')
     )
-    deps.pub));
+    pubspecNixLock.pub));
 }
