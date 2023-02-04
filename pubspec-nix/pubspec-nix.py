@@ -181,7 +181,8 @@ def get_pub(pubspec_lock):
             path, value = _prefetch_package(name, package)
             pub[path] = value
 
-        pbar.update()
+            pbar.update()
+
 
     return pub
 
@@ -192,7 +193,7 @@ def main():
 
     pubspec_lock = yaml.safe_load(open("pubspec.lock", "r"))
 
-    pbar = tqdm(total=len({ k: v for k, v in pubspec_lock["packages"].items() if "url" in v["description"] }))
+    pbar = tqdm(total=len({ k: v for k, v in pubspec_lock["packages"].items() if v["source"] == "git" or v["source"] == "hosted" }))
 
     is_flutter = "flutter" in pubspec_lock["packages"] and pubspec_lock["packages"]["flutter"]["source"] == "sdk" 
     if is_flutter:
