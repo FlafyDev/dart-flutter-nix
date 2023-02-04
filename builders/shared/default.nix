@@ -4,17 +4,16 @@
   fetchgit,
   runCommand,
 }: {
-  generatePubCache = let
-    getFetcher = fetcher:
-      {inherit fetchzip fetchgit;}.${fetcher}
-      or (throw "Unknown fetcher: ${fetcher}");
-  in
-    {
-      pubspecNixLock,
-      args,
-    }: (runCommand "${args.pname}-pub-cache" {} (lib.mapAttrsToList (
+  generatePubCache = {
+    pubspecNixLock,
+    args,
+  }:
+    runCommand "${args.pname}-pub-cache" {} (lib.mapAttrsToList (
         path: dep: let
-          derv = (getFetcher dep.fetcher) dep.args;
+          fetcher =
+            {inherit fetchzip fetchgit;}.${dep.fetcher}
+            or (throw "Unknown fetcher: ${dep.fetcher}");
+          derv = fetcher dep.args;
         in
           ''
             mkdir -p $out/${dirOf path}
@@ -27,5 +26,5 @@
             ln -s ${derv}/.git $CACHE_DIR
           '')
       )
-      pubspecNixLock.pub));
+      pubspecNixLock.pub);
 }
