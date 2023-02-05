@@ -63,8 +63,7 @@
       pname = "${pname}-unwrapped";
       inherit version;
 
-      # depsFile = ./patches/elinux/deps2nix.lock;
-      deps = {
+      pubspecNixLock = {
         dart = {
           executables = {
             flutter-elinux = "flutter_elinux";

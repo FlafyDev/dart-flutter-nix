@@ -1,6 +1,7 @@
 {
   lib,
   dart,
+  git,
   makeWrapper,
   stdenv,
   generatePubCache,
@@ -14,11 +15,11 @@
 
   jit = args.jit or false;
 
-  deps = args.deps or (importJSON (args.depsFile or (args.src + "/deps2nix.lock")));
-  inherit (deps.dart) executables;
+  pubspecNixLock = args.pubspecNixLock or (importJSON (args.pubspecNixLockFile or (args.src + "/pubspec-nix.lock")));
+  inherit (pubspecNixLock.dart) executables;
 
   pubCache = generatePubCache {
-    inherit deps;
+    inherit pubspecNixLock;
     inherit (args) pname;
   };
 
@@ -49,12 +50,13 @@
     executables);
 in
   stdenv.mkDerivation ((builtins.removeAttrs args [
-      "deps"
-      "depsFile"
+      "pubspecNixLock"
+      "pubspecNixLockFile"
     ])
     // {
       nativeBuildInputs =
         [
+          git
           makeWrapper
         ]
         ++ (args.nativeBuildInputs or []);
@@ -72,6 +74,7 @@ in
 
         HOME=$(mktemp -d)
 
+        git config --global --add safe.directory '*'
         dart pub get --offline
 
         runHook postConfigure

@@ -4,7 +4,7 @@
   mkShell,
   callPackage,
   android-sdk-builder,
-  deps2nix,
+  pubspec-nix,
   flutter,
 }: {
   linux ? {enable = false;},
@@ -40,7 +40,7 @@ in
       packages =
         (lib.lists.flatten (map (shell: shell.packages or []) shells))
         ++ [
-          deps2nix
+          pubspec-nix
         ];
 
       nativeBuildInputs =

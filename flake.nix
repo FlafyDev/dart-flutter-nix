@@ -24,7 +24,7 @@
       };
     in {
       packages = {
-        inherit (pkgs) deps2nix flutter-elinux flutter;
+        inherit (pkgs) pubspec-nix flutter-elinux flutter;
       };
       devShells = rec {
         default = linux-shell;
@@ -39,10 +39,11 @@
           linux.enable = true;
           android = {
             enable = true;
-            sdkPackages = sdkPkgs: with sdkPkgs; [
-              build-tools-30-0-3
-              platforms-android-31
-            ];
+            sdkPackages = sdkPkgs:
+              with sdkPkgs; [
+                build-tools-30-0-3
+                platforms-android-31
+              ];
           };
         };
       };
@@ -65,11 +66,11 @@
             pname = "flutter";
             inherit (prev.flutter) dart;
             inherit (prev.flutter.unwrapped) src version;
-          }) { };
+          }) {};
           flutter-elinux = prev.callPackage ./elinux/package.nix {
             inherit unpackTarball;
           };
-          deps2nix = prev.callPackage ./deps2nix {
+          pubspec-nix = prev.callPackage ./pubspec-nix {
             inherit mkPyScript;
           };
           buildFlutterApp = prev.callPackage ./builders/build-flutter-app.nix {
