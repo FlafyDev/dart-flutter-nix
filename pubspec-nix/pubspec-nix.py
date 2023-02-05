@@ -194,7 +194,7 @@ def main():
 
     pbar = tqdm(total=len(packages))
 
-    is_flutter = "flutter" in pubspec_lock["packages"] and pubspec_lock["packages"]["flutter"]["source"] == "sdk" 
+    is_flutter = "flutter" in packages and packages["flutter"]["source"] == "sdk" 
     if is_flutter:
         pbar.write("Flutter project detected.")
 
@@ -205,11 +205,9 @@ def main():
 
         pubspec_yaml = yaml.safe_load(open("pubspec.yaml", "r"))
 
-        if pubspec_yaml["executables"]:
-            deps["dart"] = {
-                "executables": pubspec_yaml["executables"] 
-            }
-            pbar.write("Found executables.")
+        deps["dart"] = {
+            "executables": pubspec_yaml.get("executables", {})
+        }
 
     deps["pub"] = get_pub(packages)
 

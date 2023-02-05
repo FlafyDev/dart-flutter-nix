@@ -13,7 +13,7 @@
 }:
 stdenvNoCC.mkDerivation {
   inherit name;
-  buildInputs = [makeWrapper (python.withPackages pythonLibraries)];
+  buildInputs = [makeWrapper];
   unpackPhase = "true";
   installPhase = let
     wrap =
@@ -22,8 +22,9 @@ stdenvNoCC.mkDerivation {
       else "wrapProgram $out/bin/${name} --suffix PATH : ${
         lib.makeBinPath dependencies
       }";
+    wrappedPython = python.withPackages pythonLibraries;
 
-    file = writeText "${name}-py-file" "#!/usr/bin/env python\n\n${content}";
+    file = writeText "${name}-py-file" "#!${wrappedPython}/bin/python\n\n${content}";
   in ''
     mkdir -p $out/bin
     cp ${file} $out/bin/${name}

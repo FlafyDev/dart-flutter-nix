@@ -32,7 +32,7 @@
   runCommand,
   clang,
   tree,
-  callPackage,
+  generatePubCache,
 }: args: let
   inherit
     (lib)
@@ -41,11 +41,12 @@
     makeLibraryPath
     ;
 
-  shared = callPackage ./shared {};
+  pubspecNixLock = args.pubspecNixLock or (importJSON (args.pubspecNixLockFile or (args.src + "/pubspec-nix.lock")));
 
-  pubspecNixLock = importJSON (args.pubspecNixLockFile or (args.src + "/pubspec-nix.lock"));
-
-  pubCache = shared.generatePubCache {inherit pubspecNixLock args;};
+  pubCache = generatePubCache {
+    inherit pubspecNixLock;
+    inherit (args) pname;
+  };
 
   # ~/.cache/flutter/<cache files>
   cache = runCommand "${args.pname}-cache" {} ((mapAttrsToList
@@ -62,7 +63,10 @@
       '')
       pubspecNixLock.sdk.stamps));
 in
-  stdenv.mkDerivation (args
+  stdenv.mkDerivation ((builtins.removeAttrs args [
+      "pubspecNixLock"
+      "pubspecNixLockFile"
+    ])
     // rec {
       nativeBuildInputs =
         [
