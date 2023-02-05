@@ -43,9 +43,9 @@
 
   shared = callPackage ./shared {};
 
-  deps = importJSON (args.depsFile or (args.src + "/deps2nix.lock"));
+  pubspecNixLock = importJSON (args.pubspecNixLockFile or (args.src + "/pubspec-nix.lock"));
 
-  pubCache = shared.generatePubCache {inherit deps args;};
+  pubCache = shared.generatePubCache {inherit pubspecNixLock args;};
 
   # ~/.cache/flutter/<cache files>
   cache = runCommand "${args.pname}-cache" {} ((mapAttrsToList
@@ -55,12 +55,12 @@
         mkdir -p $out/${sdk.cachePath}
         ln -s ${derv}/* $out/${sdk.cachePath}
       '')
-      deps.sdk.artifacts)
+      pubspecNixLock.sdk.artifacts)
     ++ (mapAttrsToList
       (name: version: ''
         echo ${version} > $out/${name}.stamp
       '')
-      deps.sdk.stamps));
+      pubspecNixLock.sdk.stamps));
 in
   stdenv.mkDerivation (args
     // rec {
@@ -133,6 +133,7 @@ in
         flutter config --no-analytics &>/dev/null # mute first-run
         flutter config --enable-linux-desktop
 
+        git config --global --add safe.directory '*'
         flutter pub get --offline
 
         runHook postConfigure
