@@ -30,7 +30,7 @@
       };
       checks = {
         inherit (pkgs) pubspec-nix flutter-elinux flutter;
-        flutter-default-app = pkgs.callPackage ./tests/flutter_default_app.nix {};
+        flutter-default-app = pkgs.callPackage ./checks/flutter_default_app.nix {};
       };
       devShells = rec {
         default = linux-shell;

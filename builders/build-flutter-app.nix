@@ -37,7 +37,6 @@
   inherit
     (lib)
     importJSON
-    mapAttrsToList
     makeLibraryPath
     ;
 
@@ -47,21 +46,6 @@
     inherit pubspecNixLock;
     inherit (args) pname;
   };
-
-  # ~/.cache/flutter/<cache files>
-  cache = runCommand "${args.pname}-cache" {} ((mapAttrsToList
-      (_name: sdk: let
-        derv = fetchzip (removeAttrs sdk ["cachePath"]);
-      in ''
-        mkdir -p $out/${sdk.cachePath}
-        ln -s ${derv}/* $out/${sdk.cachePath}
-      '')
-      pubspecNixLock.sdk.artifacts)
-    ++ (mapAttrsToList
-      (name: version: ''
-        echo ${version} > $out/${name}.stamp
-      '')
-      pubspecNixLock.sdk.stamps));
 in
   stdenv.mkDerivation ((builtins.removeAttrs args [
       "pubspecNixLock"
@@ -126,12 +110,7 @@ in
 
         HOME=$(mktemp -d)
 
-        mkdir -p $HOME/.cache/flutter
-        cp -r ${cache}/* $HOME/.cache/flutter
-        chmod +wr -R $HOME/.cache/flutter
-
         # Test directories
-        # tree $HOME/.cache/flutter
         # tree $PUB_CACHE -L 3
 
         flutter config --no-analytics &>/dev/null # mute first-run
