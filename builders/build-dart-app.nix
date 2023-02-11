@@ -2,9 +2,9 @@
   lib,
   dart,
   git,
-  callPackage,
   makeWrapper,
   stdenv,
+  generatePubCache,
 }: args: let
   inherit
     (lib)
@@ -13,13 +13,16 @@
     concatStringsSep
     ;
 
-  shared = callPackage ./shared {};
   jit = args.jit or false;
 
-  pubspecNixLock = importJSON (args.pubspecNixLockFile or (args.src + "/pubspec-nix.lock"));
+  pubspecNixLock = args.pubspecNixLock or (importJSON (args.pubspecNixLockFile or (args.src + "/pubspec-nix.lock")));
   inherit (pubspecNixLock.dart) executables;
 
-  pubCache = shared.generatePubCache {inherit pubspecNixLock args;};
+  pubCache = generatePubCache {
+    inherit pubspecNixLock;
+    inherit (args) pname;
+  };
+
   buildCommands = builtins.concatStringsSep "\n" (mapAttrsToList
     (_execName: dartFile:
       if jit
@@ -32,7 +35,7 @@
       flags = concatStringsSep " " (args.dartRuntimeFlags or []);
     in
       if jit
-      then let 
+      then let
         jitPath = "$out/lib/dart-${args.pname}-${args.version}/${dartFile}.jit";
       in ''
         cp bin/${dartFile}.jit ${jitPath}
@@ -46,7 +49,10 @@
       '')
     executables);
 in
-  stdenv.mkDerivation (args
+  stdenv.mkDerivation ((builtins.removeAttrs args [
+      "pubspecNixLock"
+      "pubspecNixLockFile"
+    ])
     // {
       nativeBuildInputs =
         [
@@ -61,7 +67,7 @@ in
         ]
         ++ (args.buildInputs or []);
 
-      PUB_CACHE = toString pubCache;
+      PUB_CACHE = args.PUB_CACHE or (toString pubCache);
 
       configurePhase = ''
         runHook preConfigure

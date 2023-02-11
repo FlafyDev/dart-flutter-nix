@@ -2,7 +2,7 @@
   description = "Tools for compiling Flutter and Dart projects";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "github:nixos/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
     android = {
       url = "github:tadfisher/android-nixpkgs";
@@ -16,7 +16,9 @@
     nixpkgs,
     android,
   }:
-    flake-utils.lib.eachDefaultSystem
+    flake-utils.lib.eachSystem [
+      "x86_64-linux"
+    ]
     (system: let
       pkgs = import nixpkgs {
         inherit system;
@@ -24,12 +26,32 @@
       };
     in {
       packages = {
-        inherit (pkgs) pubspec-nix;
+        inherit (pkgs) pubspec-nix flutter-elinux flutter;
       };
-      devShell = pkgs.mkShell {
-        packages = [
-          pkgs.pubspec-nix
-        ];
+      checks = {
+        inherit (pkgs) pubspec-nix flutter-elinux flutter;
+        flutter-default-app = pkgs.callPackage ./checks/flutter_default_app.nix {};
+      };
+      devShells = rec {
+        default = linux-shell;
+        linux-shell = pkgs.mkFlutterShell {
+          linux.enable = true;
+        };
+        elinux-shell = pkgs.mkFlutterShell {
+          linux.enable = true;
+          elinux.enable = true;
+        };
+        android-shell = pkgs.mkFlutterShell {
+          linux.enable = true;
+          android = {
+            enable = true;
+            sdkPackages = sdkPkgs:
+              with sdkPkgs; [
+                build-tools-30-0-3
+                platforms-android-31
+              ];
+          };
+        };
       };
     })
     // {
@@ -39,19 +61,32 @@
         in {
           inherit (shared) generatePubCache;
         };
-        default = _final: prev: let
+        default = final: prev: let
+          shared = prev.callPackage ./builders/shared {};
           mkPyScript = prev.callPackage ./utils/mk-py-script.nix {
             python = prev.python310;
           };
-        in rec {
+          unpackTarball = prev.callPackage ./utils/unpack-tarball.nix {};
+        in {
+          flutter = prev.callPackage (import ./flutter/package.nix {
+            pname = "flutter";
+            inherit (prev.flutter) dart;
+            inherit (prev.flutter.unwrapped) src version;
+          }) {};
+          flutter-elinux = prev.callPackage ./elinux/package.nix {
+            inherit unpackTarball;
+          };
           pubspec-nix = prev.callPackage ./pubspec-nix {
             inherit mkPyScript;
           };
-          buildFlutterApp = prev.callPackage ./builders/build-flutter-app.nix {};
-          buildDartApp = prev.callPackage ./builders/build-dart-app.nix {};
+          buildFlutterApp = prev.callPackage ./builders/build-flutter-app.nix {
+            inherit (shared) generatePubCache;
+          };
+          buildDartApp = prev.callPackage ./builders/build-dart-app.nix {
+            inherit (shared) generatePubCache;
+          };
           mkFlutterShell = prev.callPackage ./shells/mk-flutter-shell.nix {
-            android-sdk-builder = android.sdk.${prev.system};
-            inherit pubspec-nix;
+            android-sdk-builder = android.sdk.${final.system};
           };
         };
       };

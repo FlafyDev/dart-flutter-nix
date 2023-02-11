@@ -1,15 +1,14 @@
 # dart-flutter-nix
 
-Tools for compiling Flutter and Dart projects with Nix
+Tools for compiling Flutter, Dart, and [Flutter eLinux](https://github.com/sony/flutter-embedded-linux) projects with Nix
 
 ## Examples
 [github:FlafyDev/guifetch](https://github.com/FlafyDev/guifetch) - Flutter project  
 [github:FlafyDev/listen_blue](https://github.com/FlafyDev/listen_blue) - Flutter project  
 
 ## Packaging a Flutter project
-###### Tested versions: Flutter v3.0.4, v3.3.3
+###### Tested versions: Flutter v3.0.4, v3.3.3, v3.3.8
 ### 1. run `pubspec-nix`
-pubspec-nix has to be built with your version of Flutter as a dependency (It can't take `flutter` from path as it requires `flutter.unwrapped`).
 ```nix
 system: let
   pkgs = import nixpkgs {
@@ -20,17 +19,15 @@ in {
   devShell = pkgs.mkShell {
     packages = [
       pkgs.pubspec-nix
-      # or explicitly match your version of Flutter
-      (pkgs.pubspec-nix.override {
-        flutter = pkgs.flutter2;
-      })
     ];
   };
 }
 ```
 
 Once you have `pubspec-nix`, run it at the root of your Flutter project and wait for it to download everything.  
-After `pubspec-nix` is done, a file named `pubspec-nix.lock` will be created at the root of your Flutter project.
+
+After `pubspec-nix` is done, a file named `pubspec-nix.lock` will be created at the root of your Flutter project.  
+This file will be used to generate Pub's cache directory inside the Nix derivation.
 
 ### 2. Making a derivation with `buildFlutterApp`
 Now that you have the `pubspec-nix.lock`. All that's left is to make a package with `buildFlutterApp`:
@@ -41,14 +38,14 @@ buildFlutterApp {
   pname = "pname";
   version = "version";
 
-  # Opitonal: 
+  # Optional: 
   # pubspecNixLockFile = <path> (default = src/pubspec-nix.lock)
 
   src = ./.;
 }
 ```
-`pubspecNixLockFile` can be set to override the default location of `pubspec-nix.lock` (the root of the Flutter project.)  
-Setting `configurePhase`, `buildPhase`, or `installPhase` will do nothing. Consider using `pre` and `post` instead.
+`pubspecNixLockFile` can be set to override the default location of `pubspec-nix.lock`.
+Setting `configurePhase`, `buildPhase`, or `installPhase` will do nothing. Consider using `pre<Phase>` and `post<Phsae>` instead.
 
 ##### To explicitly state which Flutter to use.
 ```nix
@@ -61,7 +58,7 @@ pkgs.callPackage ./package.nix {
 
 
 ## Packaging a Dart project
-The process is similar to `buildFlutterApp`
+The process is similar to packaging a Flutter project.
 ```nix
 { buildDartApp }:
 
@@ -69,7 +66,7 @@ buildDartApp {
   pname = "pname";
   version = "version";
 
-  # Opitonal: 
+  # Optional: 
   # pubspecNixLockFile = <path> (default = src/pubspec-nix.lock)
   # dartRuntimeFlags = <list of strings> (default = []) 
   # jit = <bool> (default = false)
@@ -91,11 +88,14 @@ let
 in
 {
   devShell = pkgs.mkFlutterShell {
-    # Enable if you want to build you app for mobile.
+    # Enable if you want to build you app for Android.
     android = {
       enable = true; # Default: false
-      buildToolsVersions = [ "29-0-2" ]; # Default: [ "30-0-3" ]
-      platformsAndroidVersions = [ "32" ]; # Default: [ "31" ]
+      sdkPackages = sdkPkgs:
+        with sdkPkgs; [
+          build-tools-29-0-2
+          platforms-android-32
+        ];
       androidStudio = false; # Default: false
       emulator = false; # Default: false
     };
@@ -103,6 +103,11 @@ in
     # Enable if you want to build your app for the Linux desktop.
     linux = {
       enable = true; # Default: false
+    };
+
+    # Enable if you want to build your app with Flutter eLinux.
+    elinux = {
+      enable = true;
     };
 
     # This function also acts like `mkShell`, so you can still do:
@@ -120,7 +125,16 @@ in
 }
 ```
 
-# Sources
+## Running checks
+```console
+nix flake check --no-sandbox -L 
+```
+- `--no-sandbox` Because it also tests pubspec-nix which gets the Pub packages without hashing them (`pubspec-nix --no-hash`) so later Nix has to download these Pub packages without hashes, hence Nix needs access to the internet.  
+(`pubspec-nix` doesn't do any hashing in the flake's checks. This is due to pubspec-nix being unable to access nix store inside a derivation (even when not sandboxed) which makes the commands `nix-prefetch-*` fail.)  
+
+- `-L` Logging
+
+## Sources
 These sources helped me understand how Flutter downloads stuff.
 - https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/flutter/default.nix
 - https://github.com/ilkecan/flutter-nix

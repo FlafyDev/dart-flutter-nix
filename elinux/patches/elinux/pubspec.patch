@@ -1,0 +1,30 @@
+diff --git a/pubspec.yaml b/pubspec.yaml
+index e2100bc..e7cf7d5 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -6,6 +6,9 @@ publish_to: none
+ environment:
+   sdk: ">=2.17.0 <3.0.0"
+ 
++executables:
++  flutter-elinux: flutter_elinux
++
+ dependencies:
+   flutter_tools:
+     path: flutter/packages/flutter_tools
+@@ -17,9 +20,9 @@ dependencies:
+   xml:
+   yaml:
+ 
+-dev_dependencies:
+-  flutter_test:
+-    sdk: flutter
+-  mockito:
+-  pedantic:
+-  test:
++# dev_dependencies:
++#   flutter_test:
++#     sdk: flutter
++#   mockito:
++#   pedantic:
++#   test:
