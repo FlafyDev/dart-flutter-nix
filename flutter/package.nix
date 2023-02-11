@@ -80,9 +80,10 @@
         # rm bin/cache/*.stamp
       ''
       + lib.concatStringsSep "\n" (map (cache: ''
-        rm -r "bin/cache/${cache}"
-        ln -s "/tmp/flutter-cache/${cache}" "bin/cache/${cache}"
-      '') symlinkCache);
+          rm -r "bin/cache/${cache}"
+          ln -s "/tmp/flutter-cache/${cache}" "bin/cache/${cache}"
+        '')
+        symlinkCache);
 
     installPhase = ''
       runHook preInstall
@@ -109,16 +110,18 @@
     '';
   };
 
+  # Flutter only use these certificates
+  cert = runCommand "fedoracert" {} ''
+    mkdir -p $out/etc/pki/tls/
+    ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
+  '';
+
   # Wrap flutter inside an fhs user env to allow execution of binary,
   # like adb from $ANDROID_HOME or java from android-studio.
   fhsEnv = buildFHSUserEnv {
     name = "${name}-fhs-env";
     multiPkgs = pkgs: [
-      # Flutter only use these certificates
-      (runCommand "fedoracert" {} ''
-        mkdir -p $out/etc/pki/tls/
-        ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
-      '')
+      cert
       pkgs.zlib
     ];
     targetPkgs = pkgs:
@@ -169,7 +172,7 @@
       preferLocalBuild = true;
       allowSubstitutes = false;
       passthru = {
-        inherit dart unwrapped;
+        inherit dart unwrapped cert;
       };
       meta = with lib; {
         description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";

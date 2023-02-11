@@ -14,7 +14,17 @@
             fetcher =
               {inherit fetchzip fetchgit;}.${dep.fetcher}
               or (throw "Unknown fetcher: ${dep.fetcher}");
-            derv = fetcher dep.args;
+            derv = let
+              preDerv = fetcher dep.args;
+            in
+              if dep ? sha256
+              then preDerv
+              else
+                (preDerv.overrideAttrs (_old: {
+                  outputHashAlgo = null;
+                  outputHash = null;
+                  __noChroot = true;
+                }));
           in
             ''
               mkdir -p $out/${dirOf path}

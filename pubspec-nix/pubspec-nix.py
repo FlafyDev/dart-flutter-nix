@@ -7,10 +7,17 @@ import json
 import yaml
 from tqdm import tqdm
 import logging
+import argparse
 
 pbar: tqdm
 log = logging.getLogger(__name__)
 
+parser = argparse.ArgumentParser(
+                    prog = 'pubspec-nix',
+                    description = 'Generate pubspec-nix.lock from pubspec.yaml')
+
+parser.add_argument('--hash', default=True, action=argparse.BooleanOptionalAction)
+args = parser.parse_args();
 
 def _prefetch_hosted_package(name, package) -> tuple[str, dict]:
     version = package['version']
@@ -22,17 +29,19 @@ def _prefetch_hosted_package(name, package) -> tuple[str, dict]:
         "versions",
         f"{version}.tar.gz",
     )
-    sha256 = _prefetch_package_url(
-        name,
-        url,
-    )
 
     nixArgs = {
         "name": f"pub-{name}-{version}",
         "url": url,
         "stripRoot": False,
-        "sha256": sha256
     }
+
+    if args.hash:
+        nixArgs["sha256"] = _prefetch_package_url(
+            name,
+            url,
+        )
+
     path = join(
         package['source'],
         package['description']['url'].removeprefix("https://").replace("/", "%47"),
@@ -41,16 +50,16 @@ def _prefetch_hosted_package(name, package) -> tuple[str, dict]:
     return path, { "fetcher": "fetchzip", "args": nixArgs }
 
 def _prefetch_package_url(name, url) -> str:
-        return subprocess.check_output([
-            "nix-prefetch-url",
-            url,
-            "--unpack",
-            "--type",
-            "sha256",
-            "--name",
-            name.replace("/", "-"),
-        ],
-        encoding="utf-8", stderr=subprocess.DEVNULL).strip()
+    return subprocess.check_output([
+        "nix-prefetch-url",
+        url,
+        "--unpack",
+        "--type",
+        "sha256",
+        "--name",
+        name.replace("/", "-"),
+    ],
+    encoding="utf-8", stderr=subprocess.DEVNULL).strip()
 
 def _prefetch_git_package(name, package) -> tuple[str, dict]:
     desc = package['description']
@@ -130,7 +139,8 @@ def get_sdk_deps():
             "cachePath": cache_path or f"artifacts/{name}",
         }
 
-        sdkdeps["artifacts"][name]["sha256"] = _prefetch_package_url(name, url);
+        if args.hash:
+            sdkdeps["artifacts"][name]["sha256"] = _prefetch_package_url(name, url);
 
         pbar.update()
 

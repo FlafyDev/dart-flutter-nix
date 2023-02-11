@@ -16,7 +16,9 @@
     nixpkgs,
     android,
   }:
-    flake-utils.lib.eachDefaultSystem
+    flake-utils.lib.eachSystem [
+      "x86_64-linux"
+    ]
     (system: let
       pkgs = import nixpkgs {
         inherit system;
@@ -25,6 +27,10 @@
     in {
       packages = {
         inherit (pkgs) pubspec-nix flutter-elinux flutter;
+      };
+      checks = {
+        inherit (pkgs) pubspec-nix flutter-elinux flutter;
+        flutter-default-app = pkgs.callPackage ./tests/flutter_default_app.nix {};
       };
       devShells = rec {
         default = linux-shell;
