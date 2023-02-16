@@ -17,7 +17,7 @@
             derv = let
               preDerv = fetcher dep.args;
             in
-              if dep ? sha256
+              if dep.args ? sha256
               then preDerv
               else
                 (preDerv.overrideAttrs (_old: {
