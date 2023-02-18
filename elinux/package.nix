@@ -227,6 +227,7 @@
     } ''
       mkdir -p $out/bin/cache/
       ln -sf ${dart} $out/bin/cache/dart-sdk
+      ln -sf ${dart}/bin/dart $out/bin
       echo -n "$startScript" > $out/bin/${pname}
       chmod +x $out/bin/${pname}
     '';
