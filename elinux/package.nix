@@ -113,9 +113,9 @@
 
           # Patch ./flutter
           ${lib.concatStringsSep "\n" (
-            map (patch: "patch -p1 < ${patch}")
-            flutter.unwrapped.patches
-          )}
+          map (patch: "patch -p1 < ${patch}")
+          flutter.unwrapped.patches
+        )}
 
           HOME=../.. # required for pub upgrade --offline, ~/.pub-cache
                      # path is relative otherwise it's replaced by /build/flutter
@@ -141,18 +141,21 @@
 
         mkdir ./flutter/packages/flutter_tools/templates/plugin/elinux.tmpl
         cp -r ./templates/plugin/* ./flutter/packages/flutter_tools/templates/plugin/elinux.tmpl
-      '' ;
+      '';
 
-      preInstall = ''
-        mkdir -p $out/lib/flutter/bin/cache/
-        cp -r . $out/lib
-        ln -sf $(dirname $(dirname $(which dart))) $out/lib/flutter/bin/cache/dart-sdk
+      preInstall =
+        ''
+          mkdir -p $out/lib/flutter/bin/cache/
+          cp -r . $out/lib
+          ln -sf $(dirname $(dirname $(which dart))) $out/lib/flutter/bin/cache/dart-sdk
 
-        cp -rT ${elinuxVendor}/artifacts $out/lib/flutter/bin/cache/artifacts
-      '' + lib.concatStringsSep "\n" (map (cache: ''
-        rm -r "$out/lib/flutter/bin/cache/${cache}"
-        ln -s "/tmp/flutter-cache/${cache}" "$out/lib/flutter/bin/cache/${cache}"
-      '') symlinkCache);
+          cp -rT ${elinuxVendor}/artifacts $out/lib/flutter/bin/cache/artifacts
+        ''
+        + lib.concatStringsSep "\n" (map (cache: ''
+            rm -r "$out/lib/flutter/bin/cache/${cache}"
+            ln -s "/tmp/flutter-cache/${cache}" "$out/lib/flutter/bin/cache/${cache}"
+          '')
+          symlinkCache);
     };
   fhsEnv = buildFHSUserEnv {
     name = "${name}-fhs-env";
@@ -199,8 +202,7 @@
         systemd
       ];
   };
-  wrapped =
-    runCommand name
+  makeWrapper = {executableName}: (runCommand name
     {
       startScript = ''
         #!${bash}/bin/bash
@@ -211,7 +213,7 @@
       preferLocalBuild = true;
       allowSubstitutes = false;
       passthru = {
-        inherit unwrapped dart;
+        inherit unwrapped dart makeWrapper;
       };
       meta = with lib; {
         description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
@@ -228,8 +230,9 @@
       mkdir -p $out/bin/cache/
       ln -sf ${dart} $out/bin/cache/dart-sdk
       ln -sf ${dart}/bin/dart $out/bin
-      echo -n "$startScript" > $out/bin/${pname}
-      chmod +x $out/bin/${pname}
-    '';
+      echo -n "$startScript" > $out/bin/${executableName}
+      chmod +x $out/bin/${executableName}
+    '');
+  wrapped = makeWrapper {executableName = "flutter-elinux";};
 in
   wrapped

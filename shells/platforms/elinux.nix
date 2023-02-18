@@ -15,7 +15,7 @@
   mesa,
   libglvnd,
   flutter-elinux,
-}: _: {
+}: {exposeAsFlutter ? false}: {
   shellHook = ''
     export LD_LIBRARY_PATH=''$LD_LIBRARY_PATH:${lib.makeLibraryPath [
       libxkbcommon
@@ -33,7 +33,12 @@
     gnumake
   ];
 
-  buildInputs = [
+  buildInputs = let
+    flutter-elinux-mod =
+      if exposeAsFlutter
+      then (flutter-elinux.makeWrapper {executableName = "flutter";})
+      else flutter-elinux;
+  in [
     wayland
     wayland-protocols
     wlr-protocols
@@ -41,7 +46,7 @@
     egl-wayland
     mesa
     libglvnd
-    flutter-elinux
+    flutter-elinux-mod
 
     # drm
     libdrm

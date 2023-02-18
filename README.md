@@ -108,6 +108,7 @@ in
     # Enable if you want to build your app with Flutter eLinux.
     elinux = {
       enable = true;
+      exposeAsFlutter = true; # Default: false - Changes the executable's name from "flutter-elinux" to "flutter"
     };
 
     # This function also acts like `mkShell`, so you can still do:
