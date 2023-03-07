@@ -126,6 +126,49 @@ in
 }
 ```
 
+## Writing and packaging Dart scripts with Nix
+###### ! Still a very new feature, expect bugs !
+
+Similar to how you can easily code and package [Python](https://github.com/FlafyDev/dart-flutter-nix/blob/main/pubspec-nix/default.nix) and Shell with Nix,
+you can now do the same with Dart using [buildDartScript](https://github.com/FlafyDev/dart-flutter-nix/blob/main/utils/build-dart-script.nix) (Can be found in the default overlay of this flake.)
+
+```nix
+{buildDartScript, hello}:
+
+# 1st example
+buildDartScript "myScriptName1" {} ''
+  void main() {
+    print('Hello, World!');
+  }
+''
+
+# 2nd example
+buildDartScript "myScriptName2" {
+  isolated = true; # Clears PATH at runtime.
+  dependencies = [ hello ]; # Adds dependencies to PATH at runtime.
+  # Accepts any argument that buildDartApp accepts.
+} ''
+  import 'dart:io';
+
+  void main() async {
+    final output = await Process.run("hello", []);
+    print("Output: " + output.stdout); # Prints "Output: Hello, world!"
+  }
+''
+
+# 3rd example
+buildDartScript "myScriptName3" {} ./main.dart
+
+# 4th example
+buildDartScript "myScriptName4" {} ./src # Must contains main.dart
+```
+
+#### Dart dependencies
+Adding Dart dependencies with Pub is still not possible. Different ways of implementing this are still being considered, but it is planned.
+
+Rewriting `pubspec-nix` from Python to Dart is also planned, but blocked on this feature.
+
+
 ## Running checks
 ```console
 nix flake check --no-sandbox -L 
