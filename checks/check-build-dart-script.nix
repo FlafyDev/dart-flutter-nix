@@ -1,7 +1,12 @@
-{buildDartScript}:
+{buildDartScript, hello}:
 
-buildDartScript "myCoolScript" {} ''
-  void main() {
-    print('Hello, World!');
+buildDartScript "myCoolScript" {
+  dependencies = [ hello ];
+} ''
+  import 'dart:io';
+
+  void main() async {
+    final output = await Process.run("hello", []);
+    print("Output: " + output.stdout);
   }
 ''
