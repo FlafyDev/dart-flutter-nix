@@ -29,6 +29,7 @@
       };
       checks = {
         inherit (pkgs) pubspec-nix flutter-elinux flutter;
+        build-dart-script = pkgs.callPackage ./checks/check-build-dart-script.nix {};
         flutter-default-app = pkgs.callPackage ./checks/flutter_default_app.nix {};
       };
       devShells = rec {
@@ -84,6 +85,7 @@
           buildDartApp = prev.callPackage ./builders/build-dart-app.nix {
             inherit (shared) generatePubCache;
           };
+          buildDartScript = prev.callPackage ./utils/build-dart-script.nix { };
           mkFlutterShell = prev.callPackage ./shells/mk-flutter-shell.nix {
             android-sdk-builder = android.sdk.${final.system};
           };
