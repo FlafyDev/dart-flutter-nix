@@ -30,7 +30,7 @@
       checks = {
         inherit (pkgs) pubspec-nix flutter-elinux flutter;
         build-dart-script = pkgs.callPackage ./checks/check-build-dart-script.nix {};
-        flutter-default-app = pkgs.callPackage ./checks/flutter_default_app.nix {};
+        flutter-default-app = pkgs.callPackage ./checks/check-flutter-default-app.nix {};
       };
       devShells = rec {
         default = linux-shell;
