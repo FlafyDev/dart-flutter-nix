@@ -13,6 +13,7 @@
     concatStringsSep
     ;
 
+  name = args.name or "${args.pname}-${args.version}";
   jit = args.jit or false;
 
   pubspecNixLock = args.pubspecNixLock or (importJSON (args.pubspecNixLockFile or (args.src + "/pubspec-nix.lock")));
@@ -20,7 +21,7 @@
 
   pubCache = generatePubCache {
     inherit pubspecNixLock;
-    inherit (args) pname;
+    inherit name;
   };
 
   buildCommands = builtins.concatStringsSep "\n" (mapAttrsToList
@@ -36,13 +37,13 @@
     in
       if jit
       then let
-        jitPath = "$out/lib/dart-${args.pname}-${args.version}/${dartFile}.jit";
+        jitPath = "$out/lib/dart-${name}/${dartFile}.jit";
       in ''
         cp bin/${dartFile}.jit ${jitPath}
         makeWrapper ${dart}/bin/dart $out/bin/${execName} --argv0 "${execName}" --add-flags "${flags} ${jitPath}"
       ''
       else let
-        aotPath = "$out/lib/dart-${args.pname}-${args.version}/${dartFile}.aot";
+        aotPath = "$out/lib/dart-${name}/${dartFile}.aot";
       in ''
         cp bin/${dartFile}.aot ${aotPath}
         makeWrapper ${dart}/bin/dartaotruntime $out/bin/${execName} --argv0 "${execName}" --add-flags "${flags} ${aotPath}"
@@ -91,7 +92,7 @@ in
       installPhase = ''
         runHook preInstall
 
-        mkdir -p $out/lib/dart-${args.pname}-${args.version}
+        mkdir -p $out/lib/dart-${name}
         mkdir -p $out/bin
 
         ${installSnapshotsCommands}

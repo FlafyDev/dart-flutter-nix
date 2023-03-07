@@ -6,9 +6,9 @@
 }: {
   generatePubCache = {
     pubspecNixLock,
-    pname,
+    name,
   }:
-    runCommand "${pname}-pub-cache" {} ([''mkdir -p "$out"'']
+    runCommand "${name}-pub-cache" {} ([''mkdir -p "$out"'']
       ++ (lib.mapAttrsToList (
           path: dep: let
             fetcher =

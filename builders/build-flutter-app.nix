@@ -44,7 +44,7 @@
 
   pubCache = generatePubCache {
     inherit pubspecNixLock;
-    inherit (args) pname;
+    name = args.pname;
   };
 in
   stdenv.mkDerivation ((builtins.removeAttrs args [
