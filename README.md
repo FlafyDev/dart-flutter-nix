@@ -152,7 +152,7 @@ buildDartScript "myScriptName2" {
 
   void main() async {
     final output = await Process.run("hello", []);
-    print("Output: " + output.stdout); # Prints "Output: Hello, world!"
+    print("Output: " + output.stdout); // Prints "Output: Hello, world!"
   }
 ''
 
