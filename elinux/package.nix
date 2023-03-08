@@ -5,21 +5,30 @@
   unzip,
   lib,
   flutter,
-  runCommand,
-  buildFHSUserEnv,
-  bash,
+  autoPatchelfHook,
   unpackTarball,
   stdenvNoCC,
   wget,
   symlinkCache ? [], # Useful for experimenting with cache files without rebuilding the package.
+  gtk3,
+  libepoxy,
+  libglvnd,
+  libxkbcommon,
+  libdrm,
+  libinput,
+  systemd,
+  eudev,
+  libgccjit, # libstdc++.so.6
+  mesa,
+  wayland,
+  xorg,
 }: let
   pname = "flutter-elinux";
-  name = "${pname}-${version}";
 
   inherit (flutter) dart;
-  inherit (flutter.unwrapped) version;
+  inherit (flutter) version;
 
-  flutterSrc = unpackTarball flutter.unwrapped;
+  flutterSrc = unpackTarball flutter;
 
   # Download all the artifacts for elinux engine.
   # This is all in a single derivation because there are a lot of artifacts to get hashes for.
@@ -32,7 +41,7 @@
       ''
         mkdir -p "$out"
         mkdir -p "$out/artifacts/engine"
-        export ENGINE_SHORT_REVISION=$(head -c 10 ${flutter.unwrapped}/bin/internal/engine.version)
+        export ENGINE_SHORT_REVISION=$(head -c 10 ${flutter}/bin/internal/engine.version)
       ''
       + (lib.concatStringsSep "\n" (map (artifact: ''
           wget https://github.com/sony/flutter-embedded-linux/releases/download/$ENGINE_SHORT_REVISION/${artifact}.zip --no-check-certificate
@@ -56,12 +65,20 @@
     outputHashMode = "recursive";
   };
 
-  unwrapped =
+  elinux =
     buildDartApp.override {
       inherit dart;
     } {
-      pname = "${pname}-unwrapped";
+      pname = "${pname}";
       inherit version;
+
+      passthru = {
+        inherit dart;
+        fhsWrap = flutter.makeFhsWrapper {
+          derv = elinux; 
+          executableName = "flutter-elinux";
+        };
+      };
 
       pubspecNixLock = {
         dart = {
@@ -94,6 +111,22 @@
         git
         unzip
         which
+        autoPatchelfHook
+      ];
+
+      buildInputs = [
+        gtk3
+        libepoxy
+        libglvnd
+        libxkbcommon
+        libdrm
+        libinput
+        systemd
+        eudev
+        libgccjit # libstdc++.so.6
+        wayland
+        xorg.libX11
+        mesa
       ];
 
       preConfigure = ''
@@ -114,7 +147,7 @@
           # Patch ./flutter
           ${lib.concatStringsSep "\n" (
           map (patch: "patch -p1 < ${patch}")
-          flutter.unwrapped.patches
+          flutter.patches
         )}
 
           HOME=../.. # required for pub upgrade --offline, ~/.pub-cache
@@ -156,83 +189,14 @@
             ln -s "/tmp/flutter-cache/${cache}" "$out/lib/flutter/bin/cache/${cache}"
           '')
           symlinkCache);
-    };
-  fhsEnv = buildFHSUserEnv {
-    name = "${name}-fhs-env";
-    multiPkgs = pkgs:
-      with pkgs; [
-        # Flutter only use these certificates
-        (runCommand "fedoracert" {} ''
-          mkdir -p $out/etc/pki/tls/
-          ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
-        '')
-        pkgs.zlib
-      ];
-    targetPkgs = pkgs:
-      with pkgs; [
-        bash
-        curl
-        git
-        unzip
-        which
-        xz
 
-        # flutter test requires this lib
-        libGLU
-
-        # for android emulator
-        alsa-lib
-        dbus
-        expat
-        libpulseaudio
-        libuuid
-        xorg.libX11
-        xorg.libxcb
-        xorg.libXcomposite
-        xorg.libXcursor
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXi
-        xorg.libXrender
-        xorg.libXtst
-        libGL
-        nspr
-        nss
-        systemd
-      ];
-  };
-  makeWrapper = {executableName}: (runCommand name
-    {
-      startScript = ''
-        #!${bash}/bin/bash
-        export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
+      postFixup = ''
+        sed -i '2i\
+        export PUB_CACHE=\''${PUB_CACHE:-"\$HOME/.pub-cache"}\
         export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
-        ${fhsEnv}/bin/${name}-fhs-env ${unwrapped}/bin/flutter-elinux --no-version-check "$@"
+        ' $out/lib/bin/flutter-elinux
       '';
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-      passthru = {
-        inherit unwrapped dart makeWrapper;
-      };
-      meta = with lib; {
-        description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
-        longDescription = ''
-          Flutter is Google’s UI toolkit for building beautiful,
-          natively compiled applications for mobile, web, and desktop from a single codebase.
-        '';
-        homepage = "https://flutter.dev";
-        license = licenses.bsd3;
-        platforms = ["x86_64-linux" "aarch64-linux"];
-        maintainers = [];
-      };
-    } ''
-      mkdir -p $out/bin/cache/
-      ln -sf ${dart} $out/bin/cache/dart-sdk
-      ln -sf ${dart}/bin/dart $out/bin
-      echo -n "$startScript" > $out/bin/${executableName}
-      chmod +x $out/bin/${executableName}
-    '');
-  wrapped = makeWrapper {executableName = "flutter-elinux";};
+
+    };
 in
-  wrapped
+  elinux

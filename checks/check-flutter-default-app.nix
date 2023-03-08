@@ -9,6 +9,7 @@
     runCommand "flutter-default-app-src" {
       nativeBuildInputs = [flutter];
     } ''
+      export HOME=/tmp
       flutter create app
       cp -rT app $out
     '';

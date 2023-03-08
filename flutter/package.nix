@@ -8,6 +8,9 @@
   buildFHSUserEnv,
   cacert,
   git,
+  curl,
+  unzip,
+  xz,
   runCommand,
   stdenv,
   lib,
@@ -32,11 +35,21 @@
   systemd,
   which,
   symlinkCache ? [], # Useful for experimenting with cache files without rebuilding the package.
+  autoPatchelfHook,
+  gtk3,
+  atk,
+  glib,
+  libepoxy,
 }: let
   name = "${pname}-${version}";
-  unwrapped = stdenv.mkDerivation {
-    pname = "${pname}-unwrapped";
+  flutter = stdenv.mkDerivation {
+    pname = "${pname}";
     inherit src version;
+
+    passthru = {
+      inherit dart cert makeFhsWrapper;
+      fhsWrap = makeFhsWrapper {};
+    };
 
     patches = [
       ./patches/disable-auto-update.patch
@@ -49,7 +62,17 @@
       patchShebangs --build ./bin/
     '';
 
-    buildInputs = [dart];
+    nativeBuildInputs = [
+      autoPatchelfHook
+    ];
+
+    buildInputs = [
+      dart
+      gtk3
+      atk
+      glib
+      libepoxy
+    ];
 
     buildPhase =
       ''
@@ -96,6 +119,22 @@
       runHook postInstall
     '';
 
+    postFixup = ''
+      sed -i '2i\
+      export PUB_CACHE=\''${PUB_CACHE:-"\$HOME/.pub-cache"}\
+      export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1\
+      export PATH=$PATH:${lib.makeBinPath [
+        bash
+        curl
+        dart
+        git
+        unzip
+        which
+        xz
+      ]}
+      ' $out/bin/flutter
+    '';
+
     doInstallCheck = true;
     installCheckInputs = [which git];
     installCheckPhase = ''
@@ -108,6 +147,18 @@
 
       runHook postInstallCheck
     '';
+
+    meta = with lib; {
+      description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
+      longDescription = ''
+        Flutter is Google’s UI toolkit for building beautiful,
+        natively compiled applications for mobile, web, and desktop from a single codebase.
+      '';
+      homepage = "https://flutter.dev";
+      license = licenses.bsd3;
+      platforms = ["x86_64-linux" "aarch64-linux"];
+      maintainers = [];
+    };
   };
 
   # Flutter only use these certificates
@@ -119,7 +170,7 @@
   # Wrap flutter inside an fhs user env to allow execution of binary,
   # like adb from $ANDROID_HOME or java from android-studio.
   fhsEnv = buildFHSUserEnv {
-    name = "${name}-fhs-env";
+    name = "flutter-fhs-env";
     multiPkgs = pkgs: [
       cert
       pkgs.zlib
@@ -160,37 +211,24 @@
       ];
   };
 
-  wrapper =
-    runCommand name
+  makeFhsWrapper = {
+    executable ? "flutter",
+    newExecutableName ? executable,
+    derv ? flutter,
+  }: runCommand name
     {
       startScript = ''
         #!${bash}/bin/bash
-        export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-        export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
-        ${fhsEnv}/bin/${name}-fhs-env ${unwrapped}/bin/flutter --no-version-check "$@"
+        ${fhsEnv}/bin/flutter-fhs-env ${derv}/bin/${executable} --no-version-check "$@"
       '';
       preferLocalBuild = true;
       allowSubstitutes = false;
-      passthru = {
-        inherit dart unwrapped cert;
-      };
-      meta = with lib; {
-        description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
-        longDescription = ''
-          Flutter is Google’s UI toolkit for building beautiful,
-          natively compiled applications for mobile, web, and desktop from a single codebase.
-        '';
-        homepage = "https://flutter.dev";
-        license = licenses.bsd3;
-        platforms = ["x86_64-linux" "aarch64-linux"];
-        maintainers = [];
-      };
     } ''
       mkdir -p $out/bin/cache/
       ln -sf ${dart} $out/bin/cache/dart-sdk
       ln -sf ${dart}/bin/dart $out/bin
-      echo -n "$startScript" > $out/bin/${pname}
-      chmod +x $out/bin/${pname}
+      echo -n "$startScript" > $out/bin/${newExecutableName}
+      chmod +x $out/bin/${newExecutableName}
     '';
 in
-  wrapper
+  flutter

@@ -52,6 +52,6 @@ in
       buildInputs =
         (lib.lists.flatten (map (shell: shell.buildInputs or []) shells))
         ++ [
-          flutter
+          flutter.fhsWrap # Use FHS for dev shell flutter. (Gradle requires fhs)
         ];
     })

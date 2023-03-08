@@ -14,6 +14,7 @@
   egl-wayland,
   mesa,
   libglvnd,
+  flutter,
   flutter-elinux,
 }: {exposeAsFlutter ? false}: {
   shellHook = ''
@@ -36,7 +37,11 @@
   buildInputs = let
     flutter-elinux-mod =
       if exposeAsFlutter
-      then (flutter-elinux.makeWrapper {executableName = "flutter";})
+      then (flutter.makeFhsWrapper {
+        derv = flutter-elinux;
+        executableName = "flutter-elinux";
+        newExecutableName = "flutter";
+      })
       else flutter-elinux;
   in [
     wayland
