@@ -171,10 +171,8 @@ Rewriting `pubspec-nix` from Python to Dart is also planned, but blocked on this
 
 ## Running checks
 ```console
-nix flake check --no-sandbox -L 
+nix flake check  -L 
 ```
-- `--no-sandbox` Because it also tests pubspec-nix which gets the Pub packages without hashing them (`pubspec-nix --no-hash`) so later Nix has to download these Pub packages without hashes, hence Nix needs access to the internet.  
-(`pubspec-nix` doesn't do any hashing in the flake's checks. This is due to pubspec-nix being unable to access nix store inside a derivation (even when not sandboxed) which makes the commands `nix-prefetch-*` fail.)  
 
 - `-L` Logging
 
