@@ -4,6 +4,7 @@
   gradle,
   androidStudioPackages,
   android-sdk-builder,
+  flutter,
 }: {
   sdkPackages ? (_sdkPkgs: []),
   androidStudio ? false,
