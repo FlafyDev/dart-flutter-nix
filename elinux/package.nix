@@ -60,7 +60,7 @@
       '';
 
     # outputHash = lib.fakeSha256;
-    outputHash = "sha256-cp+5G0zs5JWdgZDu7U3cnTva/7TAw2QFDGz3uuCDUvY=";
+    outputHash = "sha256-70gKYnAWbMFM1yFjJDweLMM42++Gx1PD2sc2tXXQjaY=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
