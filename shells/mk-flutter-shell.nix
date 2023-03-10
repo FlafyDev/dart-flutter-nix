@@ -11,7 +11,10 @@
   elinux ? {enable = false;},
   android ? {enable = false;},
   ...
-} @ args: let
+} @ args:
+assert lib.assertMsg (!(elinux.exposeAsFlutter or false && android.enable))
+  "elinux.exposeAsFlutter and android.enable can't be on together."; # Both modify what flutter in PATH will be. 
+let
   shellLinux =
     if linux.enable
     then callPackage ./platforms/linux.nix {} (builtins.removeAttrs linux ["enable"])
@@ -52,6 +55,6 @@ in
       buildInputs =
         (lib.lists.flatten (map (shell: shell.buildInputs or []) shells))
         ++ [
-          flutter.fhsWrap # Use FHS for dev shell flutter. (Gradle requires fhs)
+          flutter
         ];
     })

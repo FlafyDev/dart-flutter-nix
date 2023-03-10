@@ -1,0 +1,193 @@
+{
+  "pub": {
+    "hosted/pub.dev/async-2.10.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-async-2.10.0",
+        "url": "https://pub.dev/packages/async/versions/2.10.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "00hhylamsjcqmcbxlsrfimri63gb384l31r9mqvacn6c6bvk4yfx"
+      }
+    },
+    "hosted/pub.dev/boolean_selector-2.1.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-boolean_selector-2.1.1",
+        "url": "https://pub.dev/packages/boolean_selector/versions/2.1.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "0hxq8072hb89q9s91xlz9fvrjxfy7hw6jkdwkph5dp77df841kmj"
+      }
+    },
+    "hosted/pub.dev/characters-1.2.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-characters-1.2.1",
+        "url": "https://pub.dev/packages/characters/versions/1.2.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "14410hzmgm60nn83srzyvsykpa4vvsj18icaf5sj00q5fmpbhkcq"
+      }
+    },
+    "hosted/pub.dev/clock-1.1.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-clock-1.1.1",
+        "url": "https://pub.dev/packages/clock/versions/1.1.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1z1mpmd7b6dw9w20vb5l5y3r6fmck4iriydlv9hhvmp7p6ss37hk"
+      }
+    },
+    "hosted/pub.dev/collection-1.17.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-collection-1.17.0",
+        "url": "https://pub.dev/packages/collection/versions/1.17.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "1iyl3v3j7mj3sxjf63b1kc182fwrwd04mjp5x2i61hic8ihfw545"
+      }
+    },
+    "hosted/pub.dev/cupertino_icons-1.0.5": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-cupertino_icons-1.0.5",
+        "url": "https://pub.dev/packages/cupertino_icons/versions/1.0.5.tar.gz",
+        "stripRoot": false,
+        "sha256": "0w0knjkihn65g5i62lqzsa31wc7cfbwi52sb0yqx3h8lyymh2qm4"
+      }
+    },
+    "hosted/pub.dev/fake_async-1.3.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-fake_async-1.3.1",
+        "url": "https://pub.dev/packages/fake_async/versions/1.3.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "0xyswdmj7f7ns0qhfq1s8z0wnh0gd277l73az1dh0x1zd6l7wp7k"
+      }
+    },
+    "hosted/pub.dev/flutter_lints-2.0.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-flutter_lints-2.0.1",
+        "url": "https://pub.dev/packages/flutter_lints/versions/2.0.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1slwz1w2yddavmsw7yg36xglnhww4kb2xjf3f72r1jqymzaqk4k7"
+      }
+    },
+    "hosted/pub.dev/js-0.6.5": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-js-0.6.5",
+        "url": "https://pub.dev/packages/js/versions/0.6.5.tar.gz",
+        "stripRoot": false,
+        "sha256": "13fbxgyg1v6bmzvxamg6494vk3923fn3mgxj6f4y476aqwk99n50"
+      }
+    },
+    "hosted/pub.dev/lints-2.0.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-lints-2.0.1",
+        "url": "https://pub.dev/packages/lints/versions/2.0.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "0y0iryaffx3ik4mxpcr9ys90nnkrq0r3bmi1lf8ww1xafy6nirb6"
+      }
+    },
+    "hosted/pub.dev/matcher-0.12.13": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-matcher-0.12.13",
+        "url": "https://pub.dev/packages/matcher/versions/0.12.13.tar.gz",
+        "stripRoot": false,
+        "sha256": "0pjgc38clnjbv124n8bh724db1wcc4kk125j7dxl0icz7clvm0p0"
+      }
+    },
+    "hosted/pub.dev/material_color_utilities-0.2.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-material_color_utilities-0.2.0",
+        "url": "https://pub.dev/packages/material_color_utilities/versions/0.2.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "1ibynby90nk5vriv91jqpgbiijcsn44lx9fzlwma1p7aac9v7sm5"
+      }
+    },
+    "hosted/pub.dev/meta-1.8.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-meta-1.8.0",
+        "url": "https://pub.dev/packages/meta/versions/1.8.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "01kqdd25nln5a219pr94s66p27m0kpqz0wpmwnm24kdy3ngif1v5"
+      }
+    },
+    "hosted/pub.dev/path-1.8.2": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-path-1.8.2",
+        "url": "https://pub.dev/packages/path/versions/1.8.2.tar.gz",
+        "stripRoot": false,
+        "sha256": "16ggdh29ciy7h8sdshhwmxn6dd12sfbykf2j82c56iwhhlljq181"
+      }
+    },
+    "hosted/pub.dev/source_span-1.9.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-source_span-1.9.1",
+        "url": "https://pub.dev/packages/source_span/versions/1.9.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1lq4sy7lw15qsv9cijf6l48p16qr19r7njzwr4pxn8vv1kh6rb86"
+      }
+    },
+    "hosted/pub.dev/stack_trace-1.11.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-stack_trace-1.11.0",
+        "url": "https://pub.dev/packages/stack_trace/versions/1.11.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "0bggqvvpkrfvqz24bnir4959k0c45azc3zivk4lyv3mvba6092na"
+      }
+    },
+    "hosted/pub.dev/stream_channel-2.1.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-stream_channel-2.1.1",
+        "url": "https://pub.dev/packages/stream_channel/versions/2.1.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "054by84c60yxphr3qgg6f82gg6d22a54aqjp265anlm8dwz1ji32"
+      }
+    },
+    "hosted/pub.dev/string_scanner-1.2.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-string_scanner-1.2.0",
+        "url": "https://pub.dev/packages/string_scanner/versions/1.2.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "0p1r0v2923avwfg03rk0pmc6f21m0zxpcx6i57xygd25k6hdfi00"
+      }
+    },
+    "hosted/pub.dev/term_glyph-1.2.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-term_glyph-1.2.1",
+        "url": "https://pub.dev/packages/term_glyph/versions/1.2.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1x8nspxaccls0sxjamp703yp55yxdvhj6wg21lzwd296i9rwlxh9"
+      }
+    },
+    "hosted/pub.dev/test_api-0.4.16": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-test_api-0.4.16",
+        "url": "https://pub.dev/packages/test_api/versions/0.4.16.tar.gz",
+        "stripRoot": false,
+        "sha256": "0mfyjpqkkmaqdh7xygrydx12591wq9ll816f61n80dc6rmkdx7px"
+      }
+    },
+    "hosted/pub.dev/vector_math-2.1.4": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-vector_math-2.1.4",
+        "url": "https://pub.dev/packages/vector_math/versions/2.1.4.tar.gz",
+        "stripRoot": false,
+        "sha256": "1rkpldi01mhhkgx315rrr6hnj48jilxy62v7rfzarf504pz4klmy"
+      }
+    }
+  }
+}

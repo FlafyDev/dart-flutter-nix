@@ -35,6 +35,7 @@ in {
       android-sdk
       gradle
       jdk11
+      flutter.fhsWrap # Gradle requires fhs
     ]
     ++ lib.optional androidStudio androidStudioPackages.stable;
 }

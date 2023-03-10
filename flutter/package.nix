@@ -89,6 +89,7 @@
                    # path is relative otherwise it's replaced by /build/flutter
 
         pushd "$FLUTTER_TOOLS_DIR"
+          rm -rf test
           dart pub get --offline
         popd
 
@@ -215,7 +216,7 @@
     executable ? "flutter",
     newExecutableName ? executable,
     derv ? flutter,
-  }: runCommand name
+  }: runCommand "${name}-fhs"
     {
       startScript = ''
         #!${bash}/bin/bash

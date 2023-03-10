@@ -30,7 +30,7 @@
       checks = {
         inherit (pkgs) pubspec-nix flutter-elinux flutter;
         build-dart-script = pkgs.callPackage ./checks/check-build-dart-script.nix {};
-        flutter-default-app = pkgs.callPackage ./checks/check-flutter-default-app.nix {};
+        default-flutter-build = pkgs.callPackage ./checks/default-flutter-build {};
       };
       devShells = rec {
         default = linux-shell;
@@ -68,11 +68,7 @@
           };
           unpackTarball = prev.callPackage ./utils/unpack-tarball.nix {};
         in {
-          flutter = prev.callPackage (import ./flutter/package.nix {
-            pname = "flutter";
-            inherit (prev.flutter) dart;
-            inherit (prev.flutter.unwrapped) src version;
-          }) {};
+          flutter = (prev.callPackage ./flutter {}).stable;
           flutter-elinux = prev.callPackage ./elinux/package.nix {
             inherit unpackTarball;
           };
