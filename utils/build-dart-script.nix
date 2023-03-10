@@ -1,6 +1,6 @@
 # Usage:
 # ```nix 
-#   pkgs.buildDartScript "myScriptName1" {} ''
+#   pkgs.buildDartScript "my-script-1" {} ''
 #     void main() {
 #       print('Hello, World!');
 #     }
@@ -8,7 +8,7 @@
 # ```
 #
 # ```nix
-#   pkgs.buildDartScript "myScriptName2" {
+#   pkgs.buildDartScript "my-script-2" {
 #     isolated = true;
 #     dependencies = [ pkgs.pandoc ];
 #     
@@ -20,11 +20,11 @@
 # ```
 #
 # ```nix
-#   pkgs.buildDartScript "myScriptName3" {} ./main.dart
+#   pkgs.buildDartScript "my-script-3" {} ./main.dart
 # ```
 #
 # ```nix
-#   pkgs.buildDartScript "myScriptName4" {} ./src    # Contains main.dart
+#   pkgs.buildDartScript "my-script-4" {} ./src    # Contains main.dart
 # ```
 
 {
@@ -45,10 +45,13 @@ name:
 }@args: content: let
   inherit (builtins) removeAttrs;
   inherit (lib) makeBinPath;
+  inherit (lib.strings) stringAsChars;
+
+  dartName = stringAsChars (x: if x == "-" then "_" else x) name;
 
   # Generate a pubspec.yaml file
   pubspec = writeText "pubspec.yaml" ''
-    name: ${name}
+    name: ${dartName}
     environment:
       sdk: '>=${dartVersion} <3.0.0'
     executable:
@@ -104,9 +107,9 @@ in
     ] ++ (args.buildInputs or []);
 
     fixupPhase = let
-      wrapCmd = "wrapProgram $out/bin/${name} --${if isolated then "set" else "suffix"} PATH ${makeBinPath dependencies}";
+      wrapCmd = "wrapProgram $out/bin/${dartName} --${if isolated then "set" else "suffix"} PATH ${makeBinPath dependencies}";
     in ''
-      mv $out/bin/executable $out/bin/${name}
+      mv $out/bin/executable $out/bin/${dartName}
       ${wrapCmd}
       ${args.fixupPhase or ""}
     '';

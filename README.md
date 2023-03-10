@@ -136,14 +136,14 @@ you can now do the same with Dart using [buildDartScript](https://github.com/Fla
 {buildDartScript, hello}:
 
 # 1st example
-buildDartScript "myScriptName1" {} ''
+buildDartScript "my-script-1" {} ''
   void main() {
     print('Hello, World!');
   }
 ''
 
 # 2nd example
-buildDartScript "myScriptName2" {
+buildDartScript "my-script-2" {
   isolated = true; # Clears PATH at runtime.
   dependencies = [ hello ]; # Adds dependencies to PATH at runtime.
   # Accepts any argument that buildDartApp accepts.
@@ -157,10 +157,10 @@ buildDartScript "myScriptName2" {
 ''
 
 # 3rd example
-buildDartScript "myScriptName3" {} ./main.dart
+buildDartScript "my-script-3" {} ./main.dart
 
 # 4th example
-buildDartScript "myScriptName4" {} ./src # Must contains main.dart
+buildDartScript "my-script-4" {} ./src # Must contains main.dart
 ```
 
 #### Dart dependencies

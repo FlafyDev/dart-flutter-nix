@@ -1,6 +1,6 @@
 {buildDartScript, hello}:
 
-buildDartScript "myCoolScript" {
+buildDartScript "check-dart-script" {
   dependencies = [ hello ];
 } ''
   import 'dart:io';
