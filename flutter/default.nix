@@ -40,11 +40,11 @@ in {
     #  x86_64-linux = "sha256-lFw+KaxzhuAMnu6ypczINqywzpiD+8Kd+C/UHJDrO9Y=";
     #  aarch64-linux = "sha256-snlFTY4oJ4ALGLc210USbI2Z///cx1IVYUWm7Vo5z2I=";
     #};
-    version = "3.7.7";
-    dartVersion = "2.19.4";
-    hash = "sha256-zdSVl+iMNeXeUYTprP9DPfuzwHW3Tveyd5Cvf1fOJCA=";
+    version = "3.7.9";
+    dartVersion = "2.19.6";
+    hash = "sha256-UtJuYS7lzFPXLGoO8VR1DOeCVcSYudsGYF3lbjY4Bb4=";
     dartHash = {
-      x86_64-linux = "sha256-+FkZRFEoNLoZtNg4PScNf1b+8DxWulPU41wj24DqijM=";
+      x86_64-linux = "sha256-D9/yXmrLo9YJQVWn40FjT43jR36Gwv2krUcjLBrfcE8=";
       aarch64-linux = "";
     };
   };

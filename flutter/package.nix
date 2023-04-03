@@ -85,8 +85,8 @@
 
         export DART_SDK_PATH="$(which dart)"
 
-        HOME=../.. # required for pub upgrade --offline, ~/.pub-cache
-                   # path is relative otherwise it's replaced by /build/flutter
+        HOME=$PWD
+        dart pub cache preload ./.pub-preload-cache/*
 
         pushd "$FLUTTER_TOOLS_DIR"
           rm -rf test
