@@ -1,0 +1,423 @@
+{
+  "dart": {
+    "executables": {
+      "pubspec-nix": "pubspec_nix"
+    }
+  },
+  "pub": {
+    "hosted/pub.dev/_fe_analyzer_shared-58.0.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-_fe_analyzer_shared-58.0.0",
+        "url": "https://pub.dev/packages/_fe_analyzer_shared/versions/58.0.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "10iim1ivywrgsgrwvl90j7gi44bpbsi9zz0m43i5zg0qcjqh09k0"
+      }
+    },
+    "hosted/pub.dev/analyzer-5.10.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-analyzer-5.10.0",
+        "url": "https://pub.dev/packages/analyzer/versions/5.10.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "0vbr75vf3wdlw3qx6gi6sw450aq8gaig8yr1skrmay6w0gx82z04"
+      }
+    },
+    "hosted/pub.dev/args-2.4.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-args-2.4.0",
+        "url": "https://pub.dev/packages/args/versions/2.4.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "08gp8pkrq3dynz0xhrl2rhi5q04hrcd30r5gwi78baizywqkwqpb"
+      }
+    },
+    "hosted/pub.dev/async-2.11.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-async-2.11.0",
+        "url": "https://pub.dev/packages/async/versions/2.11.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "0hfgvjajp5c2mw68186hgrk9v5zjhhi149hlhl0fap274p2v1g3q"
+      }
+    },
+    "hosted/pub.dev/boolean_selector-2.1.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-boolean_selector-2.1.1",
+        "url": "https://pub.dev/packages/boolean_selector/versions/2.1.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "0hxq8072hb89q9s91xlz9fvrjxfy7hw6jkdwkph5dp77df841kmj"
+      }
+    },
+    "hosted/pub.dev/collection-1.17.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-collection-1.17.1",
+        "url": "https://pub.dev/packages/collection/versions/1.17.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1gy9f62sy7mlm6cwd35x44gdh8dvy0kgahmidl3fcyk2k4m613kd"
+      }
+    },
+    "hosted/pub.dev/convert-3.1.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-convert-3.1.1",
+        "url": "https://pub.dev/packages/convert/versions/3.1.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "0adsigjk3l1c31i6k91p28dqyjlgwiqrs4lky5djrm2scf8k6cri"
+      }
+    },
+    "hosted/pub.dev/coverage-1.6.3": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-coverage-1.6.3",
+        "url": "https://pub.dev/packages/coverage/versions/1.6.3.tar.gz",
+        "stripRoot": false,
+        "sha256": "1yy9bgkax5b6kk7qa07p452v82fyj4rl1j03fn366ywyvhfrh6lp"
+      }
+    },
+    "hosted/pub.dev/crypto-3.0.2": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-crypto-3.0.2",
+        "url": "https://pub.dev/packages/crypto/versions/3.0.2.tar.gz",
+        "stripRoot": false,
+        "sha256": "1kjfb8fvdxazmv9ps2iqdhb8kcr31115h0nwn6v4xmr71k8jb8ds"
+      }
+    },
+    "hosted/pub.dev/file-6.1.4": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-file-6.1.4",
+        "url": "https://pub.dev/packages/file/versions/6.1.4.tar.gz",
+        "stripRoot": false,
+        "sha256": "0ajcfblf8d4dicp1sgzkbrhd0b0v0d8wl70jsnf5drjck3p3ppk7"
+      }
+    },
+    "hosted/pub.dev/frontend_server_client-3.2.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-frontend_server_client-3.2.0",
+        "url": "https://pub.dev/packages/frontend_server_client/versions/3.2.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "096v7ycix5hgnk750s1qgykyghl2mymhdkg39jrlk3kbj6xygq5b"
+      }
+    },
+    "hosted/pub.dev/glob-2.1.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-glob-2.1.1",
+        "url": "https://pub.dev/packages/glob/versions/2.1.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1a6vicag8xg6lwr1jdiyjx00lg6n4bgadlzpbl4izpcgp2gcs0sb"
+      }
+    },
+    "hosted/pub.dev/http_multi_server-3.2.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-http_multi_server-3.2.1",
+        "url": "https://pub.dev/packages/http_multi_server/versions/3.2.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1zdcm04z85jahb2hs7qs85rh974kw49hffhy9cn1gfda3077dvql"
+      }
+    },
+    "hosted/pub.dev/http_parser-4.0.2": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-http_parser-4.0.2",
+        "url": "https://pub.dev/packages/http_parser/versions/4.0.2.tar.gz",
+        "stripRoot": false,
+        "sha256": "027c4sjkhkkx3sk1aqs6s4djb87syi9h521qpm1bf21bq3gga5jd"
+      }
+    },
+    "hosted/pub.dev/io-1.0.4": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-io-1.0.4",
+        "url": "https://pub.dev/packages/io/versions/1.0.4.tar.gz",
+        "stripRoot": false,
+        "sha256": "101kd0rw26vglmr1m5p130kbrp3k7dk4p5nr77wsbwgg53w8c0d4"
+      }
+    },
+    "hosted/pub.dev/js-0.6.7": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-js-0.6.7",
+        "url": "https://pub.dev/packages/js/versions/0.6.7.tar.gz",
+        "stripRoot": false,
+        "sha256": "124a9yqrjdw3p4nnirab9hm9ziwraldlw4q5cb3sr0dcrli74qpw"
+      }
+    },
+    "hosted/pub.dev/lints-2.0.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-lints-2.0.1",
+        "url": "https://pub.dev/packages/lints/versions/2.0.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "0y0iryaffx3ik4mxpcr9ys90nnkrq0r3bmi1lf8ww1xafy6nirb6"
+      }
+    },
+    "hosted/pub.dev/logging-1.1.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-logging-1.1.1",
+        "url": "https://pub.dev/packages/logging/versions/1.1.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "08657ycb62aqdj6d4a5psd18igw7jmdhncfzzl1cvlzvqr50nnh4"
+      }
+    },
+    "hosted/pub.dev/matcher-0.12.15": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-matcher-0.12.15",
+        "url": "https://pub.dev/packages/matcher/versions/0.12.15.tar.gz",
+        "stripRoot": false,
+        "sha256": "0rqfpc8390ic3y601zh29h49yw1j412qsfix5y3fhz7xafr4szpx"
+      }
+    },
+    "hosted/pub.dev/meta-1.9.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-meta-1.9.1",
+        "url": "https://pub.dev/packages/meta/versions/1.9.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1l3zaz6q2s9mnm7s674xshsfqspy79p5kdbbnc99rf2l76avv4h3"
+      }
+    },
+    "hosted/pub.dev/mime-1.0.4": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-mime-1.0.4",
+        "url": "https://pub.dev/packages/mime/versions/1.0.4.tar.gz",
+        "stripRoot": false,
+        "sha256": "1dha9z64bsz8xhi0p62vmlyikr8xwbdlrw90hxghmm3rdgd9h25w"
+      }
+    },
+    "hosted/pub.dev/node_preamble-2.0.2": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-node_preamble-2.0.2",
+        "url": "https://pub.dev/packages/node_preamble/versions/2.0.2.tar.gz",
+        "stripRoot": false,
+        "sha256": "12ajg76r9aqmqkavvlxbnb3sszg1szcq3f30badkd0xc25mnhyh8"
+      }
+    },
+    "hosted/pub.dev/package_config-2.1.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-package_config-2.1.0",
+        "url": "https://pub.dev/packages/package_config/versions/2.1.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "1d4l0i4cby344zj45f5shrg2pkw1i1jn03kx0qqh0l7gh1ha7bpc"
+      }
+    },
+    "hosted/pub.dev/path-1.8.3": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-path-1.8.3",
+        "url": "https://pub.dev/packages/path/versions/1.8.3.tar.gz",
+        "stripRoot": false,
+        "sha256": "1mjdhq2fsz6i9krhp2mnaks2bcw34sa4p7mg0v6njk8dgx2754iv"
+      }
+    },
+    "hosted/pub.dev/pool-1.5.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-pool-1.5.1",
+        "url": "https://pub.dev/packages/pool/versions/1.5.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "0wmzs46hjszv3ayhr1p5l7xza7q9rkg2q9z4swmhdqmhlz3c50x4"
+      }
+    },
+    "hosted/pub.dev/pub_semver-2.1.3": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-pub_semver-2.1.3",
+        "url": "https://pub.dev/packages/pub_semver/versions/2.1.3.tar.gz",
+        "stripRoot": false,
+        "sha256": "10hdhsb2ikzzsfqclp4ydjsj73jpq695apx2rgyjri2l9i9inn86"
+      }
+    },
+    "hosted/pub.dev/shelf-1.4.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-shelf-1.4.0",
+        "url": "https://pub.dev/packages/shelf/versions/1.4.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "0x2xl7glrnq0hdxpy2i94a4wxbdrd6dm46hvhzgjn8alsm8z0wz1"
+      }
+    },
+    "hosted/pub.dev/shelf_packages_handler-3.0.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-shelf_packages_handler-3.0.1",
+        "url": "https://pub.dev/packages/shelf_packages_handler/versions/3.0.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "199rbdbifj46lg3iynznnsbs8zr4dfcw0s7wan8v73nvpqvli82q"
+      }
+    },
+    "hosted/pub.dev/shelf_static-1.1.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-shelf_static-1.1.1",
+        "url": "https://pub.dev/packages/shelf_static/versions/1.1.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1kqbaslz7bna9lldda3ibrjg0gczbzlwgm9cic8shg0bnl0v3s34"
+      }
+    },
+    "hosted/pub.dev/shelf_web_socket-1.0.3": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-shelf_web_socket-1.0.3",
+        "url": "https://pub.dev/packages/shelf_web_socket/versions/1.0.3.tar.gz",
+        "stripRoot": false,
+        "sha256": "0rr87nx2wdf9alippxiidqlgi82fbprnsarr1jswg9qin0yy4jpn"
+      }
+    },
+    "hosted/pub.dev/source_map_stack_trace-2.1.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-source_map_stack_trace-2.1.1",
+        "url": "https://pub.dev/packages/source_map_stack_trace/versions/2.1.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "0b5d4c5n5qd3j8n10gp1khhr508wfl3819bhk6xnl34qxz8n032k"
+      }
+    },
+    "hosted/pub.dev/source_maps-0.10.12": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-source_maps-0.10.12",
+        "url": "https://pub.dev/packages/source_maps/versions/0.10.12.tar.gz",
+        "stripRoot": false,
+        "sha256": "004lcfka01agxjdw7zjhrffdkisvgx5s61b5gsl8qqk2jd1rswa7"
+      }
+    },
+    "hosted/pub.dev/source_span-1.9.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-source_span-1.9.1",
+        "url": "https://pub.dev/packages/source_span/versions/1.9.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1lq4sy7lw15qsv9cijf6l48p16qr19r7njzwr4pxn8vv1kh6rb86"
+      }
+    },
+    "hosted/pub.dev/stack_trace-1.11.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-stack_trace-1.11.0",
+        "url": "https://pub.dev/packages/stack_trace/versions/1.11.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "0bggqvvpkrfvqz24bnir4959k0c45azc3zivk4lyv3mvba6092na"
+      }
+    },
+    "hosted/pub.dev/stream_channel-2.1.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-stream_channel-2.1.1",
+        "url": "https://pub.dev/packages/stream_channel/versions/2.1.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "054by84c60yxphr3qgg6f82gg6d22a54aqjp265anlm8dwz1ji32"
+      }
+    },
+    "hosted/pub.dev/string_scanner-1.2.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-string_scanner-1.2.0",
+        "url": "https://pub.dev/packages/string_scanner/versions/1.2.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "0p1r0v2923avwfg03rk0pmc6f21m0zxpcx6i57xygd25k6hdfi00"
+      }
+    },
+    "hosted/pub.dev/term_glyph-1.2.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-term_glyph-1.2.1",
+        "url": "https://pub.dev/packages/term_glyph/versions/1.2.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1x8nspxaccls0sxjamp703yp55yxdvhj6wg21lzwd296i9rwlxh9"
+      }
+    },
+    "hosted/pub.dev/test-1.24.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-test-1.24.1",
+        "url": "https://pub.dev/packages/test/versions/1.24.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1bcq86lnc0r92h300fvk3l2ncv12vrq07jxyhq7hgp6h0raxvj5n"
+      }
+    },
+    "hosted/pub.dev/test_api-0.5.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-test_api-0.5.1",
+        "url": "https://pub.dev/packages/test_api/versions/0.5.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "0ghamvmpf8m2hw3gmp343500bhlm4c2zzwlv6bs0xhm2jirdvs6q"
+      }
+    },
+    "hosted/pub.dev/test_core-0.5.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-test_core-0.5.1",
+        "url": "https://pub.dev/packages/test_core/versions/0.5.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "09xcjbkwz1pc42zisim3pc51psn0r5jz9bg919nd41glnb7m0r5p"
+      }
+    },
+    "hosted/pub.dev/typed_data-1.3.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-typed_data-1.3.1",
+        "url": "https://pub.dev/packages/typed_data/versions/1.3.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "1x402bvyzdmdvmyqhyfamjxf54p9j8sa8ns2n5dwsdhnfqbw859g"
+      }
+    },
+    "hosted/pub.dev/vm_service-11.3.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-vm_service-11.3.0",
+        "url": "https://pub.dev/packages/vm_service/versions/11.3.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "0jspfjn9d15amif43vs5nd2dicfcmk92wackmh7hvga0zfkgjw3h"
+      }
+    },
+    "hosted/pub.dev/watcher-1.0.2": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-watcher-1.0.2",
+        "url": "https://pub.dev/packages/watcher/versions/1.0.2.tar.gz",
+        "stripRoot": false,
+        "sha256": "1sk7gvwa7s0h4l652qrgbh7l8wyqc6nr6lki8m4rj55720p0fnyg"
+      }
+    },
+    "hosted/pub.dev/web_socket_channel-2.3.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-web_socket_channel-2.3.0",
+        "url": "https://pub.dev/packages/web_socket_channel/versions/2.3.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "0abdg4cwpxsk77bz3v3xqsndqigx5j86ya2qgsai3h2q4lkcsf97"
+      }
+    },
+    "hosted/pub.dev/webkit_inspection_protocol-1.2.0": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-webkit_inspection_protocol-1.2.0",
+        "url": "https://pub.dev/packages/webkit_inspection_protocol/versions/1.2.0.tar.gz",
+        "stripRoot": false,
+        "sha256": "0z400dzw7gf68a3wm95xi2mf461iigkyq6x69xgi7qs3fvpmn3hx"
+      }
+    },
+    "hosted/pub.dev/yaml-3.1.1": {
+      "fetcher": "fetchzip",
+      "args": {
+        "name": "pub-yaml-3.1.1",
+        "url": "https://pub.dev/packages/yaml/versions/3.1.1.tar.gz",
+        "stripRoot": false,
+        "sha256": "0mqqmzn3c9rr38b5xm312fz1vyp6vb36lm477r9hak77bxzpp0iw"
+      }
+    }
+  }
+}

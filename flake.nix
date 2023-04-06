@@ -72,16 +72,14 @@
           flutter-elinux = prev.callPackage ./elinux/package.nix {
             inherit unpackTarball;
           };
-          pubspec-nix = prev.callPackage ./pubspec-nix {
-            inherit mkPyScript;
-          };
+          pubspec-nix = prev.callPackage ./pubspec-nix {};
           buildFlutterApp = prev.callPackage ./builders/build-flutter-app.nix {
             inherit (shared) generatePubCache;
           };
           buildDartApp = prev.callPackage ./builders/build-dart-app.nix {
             inherit (shared) generatePubCache;
           };
-          buildDartScript = prev.callPackage ./utils/build-dart-script.nix { };
+          buildDartScript = prev.callPackage ./utils/build-dart-script.nix {};
           mkFlutterShell = prev.callPackage ./shells/mk-flutter-shell.nix {
             android-sdk-builder = android.sdk.${final.system};
           };
