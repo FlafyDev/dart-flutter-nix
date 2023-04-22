@@ -85,7 +85,7 @@
 
         export DART_SDK_PATH="$(which dart)"
 
-        HOME=$PWD
+        HOME=$out
         dart pub cache preload ./.pub-preload-cache/*
 
         pushd "$FLUTTER_TOOLS_DIR"
@@ -216,7 +216,8 @@
     executable ? "flutter",
     newExecutableName ? executable,
     derv ? flutter,
-  }: runCommand "${name}-fhs"
+  }:
+    runCommand "${name}-fhs"
     {
       startScript = ''
         #!${bash}/bin/bash
