@@ -67,8 +67,9 @@
             python = prev.python310;
           };
           unpackTarball = prev.callPackage ./utils/unpack-tarball.nix {};
-        in {
-          flutter = (prev.callPackage ./flutter {}).stable;
+        in rec {
+          flutter = (prev.callPackage ./flutter {inherit (prev) dart;}).stable;
+          inherit (flutter) dart;
           flutter-elinux = prev.callPackage ./elinux/package.nix {
             inherit unpackTarball;
           };
@@ -81,7 +82,7 @@
           buildDartApp = prev.callPackage ./builders/build-dart-app.nix {
             inherit (shared) generatePubCache;
           };
-          buildDartScript = prev.callPackage ./utils/build-dart-script.nix { };
+          buildDartScript = prev.callPackage ./utils/build-dart-script.nix {};
           mkFlutterShell = prev.callPackage ./shells/mk-flutter-shell.nix {
             android-sdk-builder = android.sdk.${final.system};
           };
