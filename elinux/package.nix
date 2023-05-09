@@ -60,7 +60,7 @@
       '';
 
     # outputHash = lib.fakeSha256;
-    outputHash = "sha256-70gKYnAWbMFM1yFjJDweLMM42++Gx1PD2sc2tXXQjaY=";
+    outputHash = "sha256-qg0oUGnYcOJrxpYS+QB6lnFb/09OYpmgmfiIf1tVzrI=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -75,19 +75,20 @@
       passthru = {
         inherit dart;
         fhsWrap = flutter.makeFhsWrapper {
-          derv = elinux; 
+          derv = elinux;
           executableName = "flutter-elinux";
         };
       };
 
-      pubspecNixLock = {
-        dart = {
-          executables = {
-            flutter-elinux = "flutter_elinux";
+      pubspecNixLock =
+        (builtins.fromJSON (builtins.readFile ./pubspec-nix.lock))
+        // {
+          dart = {
+            executables = {
+              flutter-elinux = "flutter_elinux";
+            };
           };
         };
-        pub = {};
-      };
 
       jit = true;
 
@@ -133,6 +134,7 @@
         cp -rT ${flutterSrc} ./flutter
         chmod -R +w ./flutter/*
 
+        export OG_PUB_CACHE=$PUB_CACHE
         unset PUB_CACHE
         pushd ./flutter
           export FLUTTER_ROOT="$(pwd)"
@@ -150,8 +152,11 @@
           flutter.patches
         )}
 
-          HOME=../.. # required for pub upgrade --offline, ~/.pub-cache
-                     # path is relative otherwise it's replaced by /build/flutter
+          HOME=$out
+
+          pushd "$FLUTTER_ROOT"
+            dart pub cache preload ./.pub-preload-cache/*
+          popd
 
           pushd "$FLUTTER_TOOLS_DIR"
             dart pub get --offline
@@ -164,7 +169,8 @@
 
           rm -r bin/cache/dart-sdk
         popd
-        export PUB_CACHE="$FLUTTER_ROOT/.pub-cache"
+        # export PUB_CACHE="$FLUTTER_ROOT/.pub-cache"
+        export PUB_CACHE=$OG_PUB_CACHE
 
         # TODO: automatically do this based on the folders in `./templates`
         # Right now the folders are: "app" and "plugin".
@@ -196,7 +202,6 @@
         export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
         ' $out/lib/bin/flutter-elinux
       '';
-
     };
 in
   elinux
