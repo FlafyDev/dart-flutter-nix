@@ -1,5 +1,8 @@
 # dart-flutter-nix
 
+## Archived. Please use Flutter/Dart from Nixpkgs.
+
+
 Tools for compiling Flutter, Dart, and [Flutter eLinux](https://github.com/sony/flutter-embedded-linux) projects with Nix
 
 ## Examples
