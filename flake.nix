@@ -73,9 +73,7 @@
           flutter-elinux = prev.callPackage ./elinux/package.nix {
             inherit unpackTarball;
           };
-          pubspec-nix = prev.callPackage ./pubspec-nix {
-            inherit mkPyScript;
-          };
+          pubspec-nix = prev.callPackage ./pubspec-nix {};
           buildFlutterApp = prev.callPackage ./builders/build-flutter-app.nix {
             inherit (shared) generatePubCache;
           };

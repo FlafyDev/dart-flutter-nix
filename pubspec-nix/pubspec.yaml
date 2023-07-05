@@ -1,0 +1,15 @@
+name: pubspec_nix
+description: A helper to generate pubspec-nix.lock files for dart-flutter-nix
+version: 1.0.0
+publish_to: none
+environment:
+  sdk: '>=2.18.0 <3.0.0'
+
+executables:
+  pubspec-nix: pubspec_nix
+dependencies:
+  yaml: ^3.1.1
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.21.0
